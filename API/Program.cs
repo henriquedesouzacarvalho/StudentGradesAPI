@@ -45,12 +45,12 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<StudentGradesContext>();
-    _ = context.Database.EnsureCreated();
+    _ = context.Database.EnsureCreatedAsync();
 }
 
-app.Run();
+await app.RunAsync();
 
 // Make the implicit Program class public for testing
-public partial class Program
+internal static partial class Program
 {
 }
