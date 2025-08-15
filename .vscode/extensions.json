@@ -1,0 +1,21 @@
+{
+  "recommendations": [
+    "ms-dotnettools.csdevkit",
+    "ms-dotnettools.csharp",
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode",
+    "usernamehw.errorlens",
+    "aaron-bond.better-comments",
+    "gruntfuggly.todo-tree",
+    "eamodio.gitlens",
+    "vivaxy.vscode-conventional-commits",
+    "formulahendry.auto-rename-tag",
+    "oderwat.indent-rainbow",
+    "johnpapa.vscode-peacock",
+    "ms-vscode.vscode-json",
+    "redhat.vscode-xml",
+    "streetsidesoftware.code-spell-checker",
+    "sonarsource.sonarlint-vscode"
+  ],
+  "unwantedRecommendations": ["ms-dotnettools.vscode-dotnet-runtime"]
+}
