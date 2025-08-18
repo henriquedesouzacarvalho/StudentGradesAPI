@@ -57,12 +57,15 @@ jobs:
           ./.sonar/scanner/dotnet-sonarscanner begin \
             /k:"henriquedesouzacarvalho_StudentGradesAPI" \
             /o:"henriquedesouzacarvalho" \
+            /n:"StudentGradesAPI" \
+            /v:"1.0" \
             /d:sonar.token="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.host.url="https://sonarcloud.io" \
+            /d:sonar.sources="." \
+            /d:sonar.exclusions="**/bin/**,**/obj/**,**/*.Designer.cs,**/Migrations/**,**/.git/**,**/.vs/**,**/.vscode/**,**/node_modules/**,**/TestResults/**" \
             /d:sonar.cs.opencover.reportsPaths="coverage.opencover.xml" \
             /d:sonar.cs.vstest.reportsPaths="TestResults/*.trx" \
-            /d:sonar.exclusions="**/bin/**,**/obj/**,**/*.Designer.cs,**/Migrations/**" \
-            /d:sonar.coverage.exclusions="**/*Tests/**,**/*Test/**"
+            /d:sonar.qualitygate.wait="true"
 
       - name: Build solution
         run: dotnet build --no-restore --configuration Release
