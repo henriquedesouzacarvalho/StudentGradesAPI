@@ -16,8 +16,8 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(builder =>
     {
         _ = builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
+                .AllowAnyMethod()
+                .AllowAnyHeader();
     });
 });
 
@@ -34,8 +34,29 @@ if (app.Environment.IsDevelopment())
     _ = app.UseSwaggerUI();
 }
 
-// Enable CORS
-app.UseCors();
+// Add CORS support
+builder.Services.AddCors(options =>
+{
+    if (builder.Environment.IsDevelopment())
+    {
+        options.AddDefaultPolicy(corsBuilder =>
+        {
+            corsBuilder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+        });
+    }
+    else
+    {
+        options.AddDefaultPolicy(corsBuilder =>
+        {
+            corsBuilder.WithOrigins("https://localhost:3000", "https://my-domain.com")
+                    .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                    .WithHeaders("Content-Type", "Authorization", "Accept")
+                    .AllowCredentials();
+        });
+    }
+});
 
 app.UseAuthorization();
 
