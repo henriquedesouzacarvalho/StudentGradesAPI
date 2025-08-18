@@ -90,7 +90,7 @@
   "git.confirmSync": false,
   "git.autofetch": true,
   "git.pruneOnFetch": true,
-  "git.inputValidation": "warn",
+  "git.inputValidation": true,
   "git.inputValidationLength": 72,
   "git.inputValidationSubjectLength": 50,
   "[typescript]": {
@@ -295,5 +295,9 @@
       "name": "Vue Green",
       "value": "#42b883"
     }
-  ]
+  ],
+  "sonarlint.connectedMode.project": {
+    "connectionId": "henriquedesouzacarvalho",
+    "projectKey": "henriquedesouzacarvalho_StudentGradesAPI"
+  }
 }
