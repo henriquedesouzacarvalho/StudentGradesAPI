@@ -11,12 +11,13 @@ namespace StudentGradesAPI.Tests.Integration;
 
 public class WebApplicationFactoryTests : IClassFixture<WebApplicationFactory<Program>>
 {
-    private readonly WebApplicationFactory<Program> _factory;
-    private readonly HttpClient _client;
-    private static readonly JsonSerializerOptions JsonOptions = new()
+    private static readonly JsonSerializerOptions _jsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
     };
+
+    private readonly WebApplicationFactory<Program> _factory;
+    private readonly HttpClient _client;
 
     public WebApplicationFactoryTests(WebApplicationFactory<Program> factory)
     {
@@ -61,7 +62,7 @@ public class WebApplicationFactoryTests : IClassFixture<WebApplicationFactory<Pr
         response.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var content = await response.Content.ReadAsStringAsync();
-        var student = JsonSerializer.Deserialize<StudentResponseDto>(content, JsonOptions);
+        var student = JsonSerializer.Deserialize<StudentResponseDto>(content, _jsonOptions);
 
         student.Should().NotBeNull();
         student!.Name.Should().Be("Integration Test Student");
