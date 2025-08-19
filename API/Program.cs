@@ -13,9 +13,9 @@ builder.Services.AddDbContext<StudentGradesContext>(options =>
 // Add CORS support
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
+    options.AddDefaultPolicy(corsBuilder =>
     {
-        _ = builder.AllowAnyOrigin()
+        corsBuilder.AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader();
     });
@@ -30,33 +30,12 @@ var app = builder.Build();
 // Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
-    _ = app.UseSwagger();
-    _ = app.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-// Add CORS support
-builder.Services.AddCors(options =>
-{
-    if (builder.Environment.IsDevelopment())
-    {
-        options.AddDefaultPolicy(corsBuilder =>
-        {
-            corsBuilder.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader();
-        });
-    }
-    else
-    {
-        options.AddDefaultPolicy(corsBuilder =>
-        {
-            corsBuilder.WithOrigins("https://localhost:3000", "https://my-domain.com")
-                    .WithMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                    .WithHeaders("Content-Type", "Authorization", "Accept")
-                    .AllowCredentials();
-        });
-    }
-});
+// Use CORS
+app.UseCors();
 
 app.UseAuthorization();
 
@@ -66,12 +45,12 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<StudentGradesContext>();
-    _ = context.Database.EnsureCreatedAsync();
+    await context.Database.EnsureCreatedAsync();
 }
 
 await app.RunAsync();
 
 // Make the implicit Program class public for testing
-internal static partial class Program
+public partial class Program
 {
 }
