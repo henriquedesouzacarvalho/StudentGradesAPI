@@ -76,16 +76,6 @@ jobs:
             --collect:"XPlat Code Coverage" \
             --settings coverlet.runsettings
 
-      # - name: Convert coverage to OpenCover format
-      #   run: |
-      #     dotnet tool install -g dotnet-reportgenerator-globaltool
-      #     reportgenerator \
-      #       -reports:"TestResults/*/coverage.cobertura.xml" \
-      #       -targetdir:"TestResults" \
-      #       -reporttypes:"OpenCover" \
-      #       -assemblyfilters:"-*Tests*"
-      #     mv TestResults/OpenCover.xml coverage.opencover.xml
-
       - name: End SonarCloud analysis
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
