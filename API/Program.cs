@@ -57,4 +57,7 @@ await app.RunAsync();
 // Make the implicit Program class public for testing
 public partial class Program
 {
+    protected Program()
+    {
+    }
 }
