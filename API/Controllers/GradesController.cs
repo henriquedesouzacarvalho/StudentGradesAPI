@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StudentGradesAPI.Extensions;
 using StudentGradesAPI.Models;
 
 namespace StudentGradesAPI.Controllers;
@@ -21,17 +22,9 @@ public sealed class GradesController : ControllerBase
     {
         var grades = await _context.Grades
             .Include(g => g.Student)
-            .Select(g => new GradeResponseDto
-            {
-                Id = g.Id,
-                Value = g.Value,
-                Subject = g.Subject,
-                CreatedAt = g.CreatedAt,
-                StudentId = g.StudentId,
-            })
             .ToListAsync();
 
-        return Ok(grades);
+        return Ok(grades.ToResponseDto());
     }
 
     // GET: api/Grades/5
@@ -44,19 +37,10 @@ public sealed class GradesController : ControllerBase
 
         if (grade == null)
         {
-            return NotFound(new { message = $"Grade with ID {id} not found." });
+            return this.EntityNotFound("Grade", id);
         }
 
-        var gradeDto = new GradeResponseDto
-        {
-            Id = grade.Id,
-            Value = grade.Value,
-            Subject = grade.Subject,
-            CreatedAt = grade.CreatedAt,
-            StudentId = grade.StudentId,
-        };
-
-        return Ok(gradeDto);
+        return Ok(grade.ToResponseDto());
     }
 
     // GET: api/Grades/student/5
@@ -69,7 +53,7 @@ public sealed class GradesController : ControllerBase
 
         if (student == null)
         {
-            return NotFound(new { message = $"Student with ID {studentId} not found." });
+            return this.EntityNotFound("Student", studentId);
         }
 
         var grades = student.Grades.Select(g => new GradeResponseDto
@@ -162,7 +146,7 @@ public sealed class GradesController : ControllerBase
 
         if (grade == null)
         {
-            return NotFound(new { message = $"Grade with ID {id} not found." });
+            return this.EntityNotFound("Grade", id);
         }
 
         // Update only provided fields
@@ -218,7 +202,7 @@ public sealed class GradesController : ControllerBase
 
         if (grade == null)
         {
-            return NotFound(new { message = $"Grade with ID {id} not found." });
+            return this.EntityNotFound("Grade", id);
         }
 
         var student = grade.Student;

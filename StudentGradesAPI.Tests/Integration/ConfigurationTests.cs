@@ -39,7 +39,7 @@ public class ConfigurationTests(WebApplicationFactory<Program> factory) : IClass
     }
 
     [Fact]
-    public void Program_ProtectedConstructor_ShouldExist()
+    public void Program_ProtectedConstructor_ShouldExistAndBeCallable()
     {
         // Arrange & Act
         var programType = typeof(Program);
@@ -48,6 +48,12 @@ public class ConfigurationTests(WebApplicationFactory<Program> factory) : IClass
         // Assert
         constructors.Should().NotBeEmpty();
         constructors.Should().Contain(c => c.IsFamily); // Protected constructor
+
+        // Execute the protected constructor to cover the code
+        var protectedConstructor = constructors.First(c => c.IsFamily);
+        var programInstance = protectedConstructor.Invoke(null);
+        programInstance.Should().NotBeNull();
+        programInstance.Should().BeOfType<Program>();
     }
 
     [Fact]

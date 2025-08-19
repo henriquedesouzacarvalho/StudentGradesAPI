@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StudentGradesAPI.Extensions;
 using StudentGradesAPI.Models;
 
 namespace StudentGradesAPI.Controllers;
@@ -21,25 +22,9 @@ public sealed class StudentsController : ControllerBase
     {
         var students = await _context.Students
             .Include(s => s.Grades)
-            .Select(s => new StudentResponseDto
-            {
-                Id = s.Id,
-                Name = s.Name,
-                Email = s.Email,
-                CreatedAt = s.CreatedAt,
-                AverageGrade = s.Grades.Any() ? s.Grades.Average(g => g.Value) : 0.0,
-                Grades = s.Grades.Select(g => new GradeResponseDto
-                {
-                    Id = g.Id,
-                    Value = g.Value,
-                    Subject = g.Subject,
-                    CreatedAt = g.CreatedAt,
-                    StudentId = g.StudentId,
-                }).ToList(),
-            })
             .ToListAsync();
 
-        return Ok(students);
+        return Ok(students.ToResponseDto());
     }
 
     // GET: api/Students/5
@@ -52,27 +37,10 @@ public sealed class StudentsController : ControllerBase
 
         if (student == null)
         {
-            return NotFound(new { message = $"Student with ID {id} not found." });
+            return this.EntityNotFound("Student", id);
         }
 
-        var studentDto = new StudentResponseDto
-        {
-            Id = student.Id,
-            Name = student.Name,
-            Email = student.Email,
-            CreatedAt = student.CreatedAt,
-            AverageGrade = student.Grades.Count != 0 ? student.Grades.Average(g => g.Value) : 0.0,
-            Grades = student.Grades.Select(g => new GradeResponseDto
-            {
-                Id = g.Id,
-                Value = g.Value,
-                Subject = g.Subject,
-                CreatedAt = g.CreatedAt,
-                StudentId = g.StudentId,
-            }).ToList(),
-        };
-
-        return Ok(studentDto);
+        return Ok(student.ToResponseDto());
     }
 
     // POST: api/Students
@@ -118,7 +86,7 @@ public sealed class StudentsController : ControllerBase
 
         if (student == null)
         {
-            return NotFound(new { message = $"Student with ID {id} not found." });
+            return this.EntityNotFound("Student", id);
         }
 
         // Check if email already exists for another student
@@ -141,24 +109,7 @@ public sealed class StudentsController : ControllerBase
 
         _ = await _context.SaveChangesAsync();
 
-        var studentDto = new StudentResponseDto
-        {
-            Id = student.Id,
-            Name = student.Name,
-            Email = student.Email,
-            CreatedAt = student.CreatedAt,
-            AverageGrade = student.Grades.Count != 0 ? student.Grades.Average(g => g.Value) : 0.0,
-            Grades = student.Grades.Select(g => new GradeResponseDto
-            {
-                Id = g.Id,
-                Value = g.Value,
-                Subject = g.Subject,
-                CreatedAt = g.CreatedAt,
-                StudentId = g.StudentId,
-            }).ToList(),
-        };
-
-        return Ok(studentDto);
+        return Ok(student.ToResponseDto());
     }
 
     // DELETE: api/Students/5
@@ -168,7 +119,7 @@ public sealed class StudentsController : ControllerBase
         var student = await _context.Students.FindAsync(id);
         if (student == null)
         {
-            return NotFound(new { message = $"Student with ID {id} not found." });
+            return this.EntityNotFound("Student", id);
         }
 
         _ = _context.Students.Remove(student);
