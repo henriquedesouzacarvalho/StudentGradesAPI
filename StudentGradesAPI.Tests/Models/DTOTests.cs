@@ -167,8 +167,12 @@ public class DTOTests
             Email = expectedEmail,
             CreatedAt = expectedCreatedAt,
             AverageGrade = expectedAverageGrade,
-            Grades = expectedGrades,
         };
+
+        foreach (var grade in expectedGrades)
+        {
+            dto.Grades.Add(grade);
+        }
 
         // Assert
         dto.Id.Should().Be(expectedId);

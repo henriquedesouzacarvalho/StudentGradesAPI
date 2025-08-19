@@ -63,7 +63,7 @@ public sealed class StudentResponseDto
 
     public double AverageGrade { get; set; }
 
-    public IList<GradeResponseDto> Grades { get; set; } = new List<GradeResponseDto>();
+    public IList<GradeResponseDto> Grades { get; } = new List<GradeResponseDto>();
 }
 
 // DTO for grade response
