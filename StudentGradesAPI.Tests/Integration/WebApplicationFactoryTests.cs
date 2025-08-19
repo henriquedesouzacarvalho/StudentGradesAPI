@@ -11,7 +11,7 @@ namespace StudentGradesAPI.Tests.Integration;
 
 public class WebApplicationFactoryTests : IClassFixture<WebApplicationFactory<Program>>
 {
-    private static readonly JsonSerializerOptions _jsonOptions = new()
+    private static readonly JsonSerializerOptions _jsonOptions = new ()
     {
         PropertyNameCaseInsensitive = true,
     };
