@@ -8,15 +8,21 @@ public static class MappingExtensions
     {
         ArgumentNullException.ThrowIfNull(student);
 
-        return new StudentResponseDto
+        var dto = new StudentResponseDto
         {
             Id = student.Id,
             Name = student.Name,
             Email = student.Email,
             CreatedAt = student.CreatedAt,
             AverageGrade = student.AverageGrade,
-            Grades = student.Grades.Select(g => g.ToResponseDto()).ToList(),
         };
+
+        foreach (var grade in student.Grades)
+        {
+            dto.Grades.Add(grade.ToResponseDto());
+        }
+
+        return dto;
     }
 
     public static GradeResponseDto ToResponseDto(this Grade grade)

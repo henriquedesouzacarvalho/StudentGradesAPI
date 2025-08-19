@@ -63,17 +63,7 @@ public sealed class StudentsController : ControllerBase
         _ = _context.Students.Add(student);
         _ = await _context.SaveChangesAsync();
 
-        var studentDto = new StudentResponseDto
-        {
-            Id = student.Id,
-            Name = student.Name,
-            Email = student.Email,
-            CreatedAt = student.CreatedAt,
-            AverageGrade = 0.0,
-            Grades = new List<GradeResponseDto>(),
-        };
-
-        return CreatedAtAction(nameof(GetStudent), new { id = student.Id }, studentDto);
+        return CreatedAtAction(nameof(GetStudent), new { id = student.Id }, student.ToResponseDto());
     }
 
     // PUT: api/Students/5
