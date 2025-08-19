@@ -6,6 +6,8 @@ public static class MappingExtensions
 {
     public static StudentResponseDto ToResponseDto(this Student student)
     {
+        ArgumentNullException.ThrowIfNull(student);
+
         return new StudentResponseDto
         {
             Id = student.Id,
@@ -19,6 +21,8 @@ public static class MappingExtensions
 
     public static GradeResponseDto ToResponseDto(this Grade grade)
     {
+        ArgumentNullException.ThrowIfNull(grade);
+
         return new GradeResponseDto
         {
             Id = grade.Id,
@@ -31,11 +35,15 @@ public static class MappingExtensions
 
     public static IEnumerable<StudentResponseDto> ToResponseDto(this IEnumerable<Student> students)
     {
+        ArgumentNullException.ThrowIfNull(students);
+
         return students.Select(s => s.ToResponseDto());
     }
 
     public static IEnumerable<GradeResponseDto> ToResponseDto(this IEnumerable<Grade> grades)
     {
+        ArgumentNullException.ThrowIfNull(grades);
+
         return grades.Select(g => g.ToResponseDto());
     }
 }
