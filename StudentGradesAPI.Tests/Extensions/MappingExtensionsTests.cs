@@ -19,8 +19,8 @@ public class MappingExtensionsTests
             CreatedAt = DateTime.UtcNow,
         };
 
-        student.Grades.Add(new() { Id = 1, Value = 8.5, Subject = "Math", StudentId = 1, CreatedAt = DateTime.UtcNow });
-        student.Grades.Add(new() { Id = 2, Value = 9.0, Subject = "Physics", StudentId = 1, CreatedAt = DateTime.UtcNow });
+        student.Grades.Add(new () { Id = 1, Value = 8.5, Subject = "Math", StudentId = 1, CreatedAt = DateTime.UtcNow });
+        student.Grades.Add(new () { Id = 2, Value = 9.0, Subject = "Physics", StudentId = 1, CreatedAt = DateTime.UtcNow });
 
         // Act
         var result = student.ToResponseDto();
@@ -91,8 +91,8 @@ public class MappingExtensionsTests
         // Arrange
         var students = new List<Student>
         {
-            new() { Id = 1, Name = "John", Email = "john@example.com", CreatedAt = DateTime.UtcNow },
-            new() { Id = 2, Name = "Jane", Email = "jane@example.com", CreatedAt = DateTime.UtcNow }
+            new () { Id = 1, Name = "John", Email = "john@example.com", CreatedAt = DateTime.UtcNow },
+            new () { Id = 2, Name = "Jane", Email = "jane@example.com", CreatedAt = DateTime.UtcNow }
         };
 
         // Act
@@ -121,8 +121,8 @@ public class MappingExtensionsTests
         // Arrange
         var grades = new List<Grade>
         {
-            new() { Id = 1, Value = 8.5, Subject = "Math", StudentId = 1, CreatedAt = DateTime.UtcNow },
-            new() { Id = 2, Value = 9.0, Subject = "Physics", StudentId = 1, CreatedAt = DateTime.UtcNow }
+            new () { Id = 1, Value = 8.5, Subject = "Math", StudentId = 1, CreatedAt = DateTime.UtcNow },
+            new () { Id = 2, Value = 9.0, Subject = "Physics", StudentId = 1, CreatedAt = DateTime.UtcNow }
         };
 
         // Act

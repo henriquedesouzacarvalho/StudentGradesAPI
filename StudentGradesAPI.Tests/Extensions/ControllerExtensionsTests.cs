@@ -12,17 +12,17 @@ public class ControllerExtensionsTests
     {
         // Arrange
         var controller = new TestController();
-        const string entityName = "Student";
-        const int id = 1;
+        const string EntityName = "Student";
+        const int Id = 1;
 
         // Act
-        var result = controller.EntityNotFound(entityName, id);
+        var result = controller.EntityNotFound(EntityName, Id);
 
         // Assert
         result.Should().NotBeNull();
         result.Should().BeOfType<NotFoundObjectResult>();
         result.StatusCode.Should().Be(404);
-        
+
         var value = result.Value;
         value.Should().NotBeNull();
         var message = value!.GetType().GetProperty("message")?.GetValue(value) as string;
@@ -34,11 +34,11 @@ public class ControllerExtensionsTests
     {
         // Arrange
         ControllerBase controller = null!;
-        const string entityName = "Student";
-        const int id = 1;
+        const string EntityName = "Student";
+        const int Id = 1;
 
         // Act & Assert
-        var action = () => controller.EntityNotFound(entityName, id);
+        var action = () => controller.EntityNotFound(EntityName, Id);
         action.Should().Throw<ArgumentNullException>();
     }
 
@@ -48,10 +48,10 @@ public class ControllerExtensionsTests
         // Arrange
         var controller = new TestController();
         string entityName = null!;
-        const int id = 1;
+        const int Id = 1;
 
         // Act & Assert
-        var action = () => controller.EntityNotFound(entityName, id);
+        var action = () => controller.EntityNotFound(entityName, Id);
         action.Should().Throw<ArgumentException>();
     }
 
@@ -60,11 +60,11 @@ public class ControllerExtensionsTests
     {
         // Arrange
         var controller = new TestController();
-        const string entityName = "";
-        const int id = 1;
+        const string EntityName = "";
+        const int Id = 1;
 
         // Act & Assert
-        var action = () => controller.EntityNotFound(entityName, id);
+        var action = () => controller.EntityNotFound(EntityName, Id);
         action.Should().Throw<ArgumentException>();
     }
 
@@ -73,11 +73,11 @@ public class ControllerExtensionsTests
     {
         // Arrange
         var controller = new TestController();
-        const string entityName = "   ";
-        const int id = 1;
+        const string EntityName = "   ";
+        const int Id = 1;
 
         // Act & Assert
-        var action = () => controller.EntityNotFound(entityName, id);
+        var action = () => controller.EntityNotFound(EntityName, Id);
         action.Should().Throw<ArgumentException>();
     }
 
