@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
 namespace StudentGradesAPI.Tests;
@@ -19,7 +19,7 @@ public class BasicIntegrationTest : IClassFixture<WebApplicationFactory<Program>
     public async Task Get_Students_ReturnsSuccessStatusCode()
     {
         // Act
-        var response = await _client.GetAsync("/api/students");
+        var response = await _client.GetAsync(new Uri("/api/students", UriKind.Relative));
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -29,7 +29,7 @@ public class BasicIntegrationTest : IClassFixture<WebApplicationFactory<Program>
     public async Task Get_Grades_ReturnsSuccessStatusCode()
     {
         // Act
-        var response = await _client.GetAsync("/api/grades");
+        var response = await _client.GetAsync(new Uri("/api/grades", UriKind.Relative));
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);

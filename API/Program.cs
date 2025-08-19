@@ -10,14 +10,18 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<StudentGradesContext>(options =>
     options.UseInMemoryDatabase("StudentGradesDB"));
 
-// Add CORS support
+// Add CORS support with specific origins
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>()
+    ?? new[] { "http://localhost:3000", "https://localhost:3000" };
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(corsBuilder =>
     {
-        corsBuilder.AllowAnyOrigin()
+        corsBuilder.WithOrigins(allowedOrigins)
                 .AllowAnyMethod()
-                .AllowAnyHeader();
+                .AllowAnyHeader()
+                .AllowCredentials();
     });
 });
 

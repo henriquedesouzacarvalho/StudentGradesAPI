@@ -35,7 +35,7 @@ public class StudentTests
             Id = 1,
             Name = expectedName,
             Email = expectedEmail,
-            CreatedAt = expectedCreatedAt
+            CreatedAt = expectedCreatedAt,
         };
 
         // Assert
@@ -54,7 +54,7 @@ public class StudentTests
         var student = new Student
         {
             Name = "John Doe",
-            Email = "john.doe@example.com"
+            Email = "john.doe@example.com",
         };
 
         // Act & Assert
@@ -69,13 +69,10 @@ public class StudentTests
         {
             Name = "John Doe",
             Email = "john.doe@example.com",
-            Grades = new List<Grade>
-            {
-                new Grade { Value = 8.0, Subject = "Math", StudentId = 1 },
-                new Grade { Value = 9.0, Subject = "Physics", StudentId = 1 },
-                new Grade { Value = 7.0, Subject = "Chemistry", StudentId = 1 }
-            }
         };
+        student.Grades.Add(new Grade { Value = 8.0, Subject = "Math", StudentId = 1 });
+        student.Grades.Add(new Grade { Value = 9.0, Subject = "Physics", StudentId = 1 });
+        student.Grades.Add(new Grade { Value = 7.0, Subject = "Chemistry", StudentId = 1 });
 
         // Act
         var average = student.AverageGrade;
@@ -92,11 +89,8 @@ public class StudentTests
         {
             Name = "John Doe",
             Email = "john.doe@example.com",
-            Grades = new List<Grade>
-            {
-                new Grade { Value = 8.5, Subject = "Math", StudentId = 1 }
-            }
         };
+        student.Grades.Add(new Grade { Value = 8.5, Subject = "Math", StudentId = 1 });
 
         // Act
         var average = student.AverageGrade;
@@ -124,13 +118,13 @@ public class StudentTests
         var student = new Student
         {
             Name = "John Doe",
-            Email = "john.doe@example.com"
+            Email = "john.doe@example.com",
         };
         var grade = new Grade
         {
             Value = 8.5,
             Subject = "Mathematics",
-            StudentId = 1
+            StudentId = 1,
         };
 
         // Act

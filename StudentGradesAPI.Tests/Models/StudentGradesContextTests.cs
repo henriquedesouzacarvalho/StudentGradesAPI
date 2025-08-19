@@ -36,7 +36,7 @@ public sealed class StudentGradesContextTests : IDisposable
         var student = new Student
         {
             Name = "Test Student",
-            Email = "test@example.com"
+            Email = "test@example.com",
         };
 
         // Act
@@ -92,12 +92,12 @@ public sealed class StudentGradesContextTests : IDisposable
         var student1 = new Student
         {
             Name = "Student 1",
-            Email = "student1@example.com"
+            Email = "student1@example.com",
         };
         var student2 = new Student
         {
             Name = "Student 2",
-            Email = "student2@example.com"
+            Email = "student2@example.com",
         };
 
         // Act
@@ -119,7 +119,7 @@ public sealed class StudentGradesContextTests : IDisposable
         var student = new Student
         {
             Name = "Test Student",
-            Email = "test@example.com"
+            Email = "test@example.com",
         };
         _context.Students.Add(student);
         await _context.SaveChangesAsync();
@@ -128,7 +128,7 @@ public sealed class StudentGradesContextTests : IDisposable
         {
             Value = 8.5,
             Subject = "Mathematics",
-            StudentId = student.Id
+            StudentId = student.Id,
         };
         _context.Grades.Add(grade);
         await _context.SaveChangesAsync();
@@ -149,7 +149,7 @@ public sealed class StudentGradesContextTests : IDisposable
         var student = new Student
         {
             Name = "Test Student",
-            Email = "test@example.com"
+            Email = "test@example.com",
         };
         _context.Students.Add(student);
         await _context.SaveChangesAsync();
@@ -157,7 +157,7 @@ public sealed class StudentGradesContextTests : IDisposable
         var grades = new List<Grade>
         {
             new Grade { Value = 8.5, Subject = "Math", StudentId = student.Id },
-            new Grade { Value = 9.0, Subject = "Physics", StudentId = student.Id }
+            new Grade { Value = 9.0, Subject = "Physics", StudentId = student.Id },
         };
         _context.Grades.AddRange(grades);
         await _context.SaveChangesAsync();

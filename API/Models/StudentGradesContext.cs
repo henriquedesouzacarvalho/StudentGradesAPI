@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace StudentGradesAPI.Models;
 
-public class StudentGradesContext : DbContext
+public sealed class StudentGradesContext : DbContext
 {
     public StudentGradesContext(DbContextOptions<StudentGradesContext> options)
         : base(options)

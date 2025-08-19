@@ -28,7 +28,7 @@ public sealed class GradesControllerTests : IDisposable
         var actionResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var grades = actionResult.Value.Should().BeAssignableTo<IEnumerable<GradeResponseDto>>().Subject;
         grades.Should().HaveCount(3);
-        
+
         var gradesList = grades.ToList();
         gradesList.Should().Contain(g => g.Subject == "Mathematics" && g.Value == 8.5);
         gradesList.Should().Contain(g => g.Subject == "Physics" && g.Value == 9.0);
@@ -44,7 +44,7 @@ public sealed class GradesControllerTests : IDisposable
         // Assert
         var actionResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var grade = actionResult.Value.Should().BeOfType<GradeResponseDto>().Subject;
-        
+
         grade.Id.Should().Be(1);
         grade.Value.Should().Be(8.5);
         grade.Subject.Should().Be("Mathematics");
@@ -72,7 +72,7 @@ public sealed class GradesControllerTests : IDisposable
         // Assert
         var actionResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var response = actionResult.Value.Should().BeAssignableTo<object>().Subject;
-        
+
         // Use anonymous type matching
         var expectedResponse = new
         {
@@ -80,7 +80,7 @@ public sealed class GradesControllerTests : IDisposable
             StudentName = "John Doe",
             Grades = new List<object>(),
             AverageGrade = 8.75,
-            TotalGrades = 2
+            TotalGrades = 2,
         };
 
         response.Should().BeEquivalentTo(expectedResponse, options => options
@@ -112,7 +112,7 @@ public sealed class GradesControllerTests : IDisposable
         var student = new Student
         {
             Name = "No Grades Student",
-            Email = "nogrades@example.com"
+            Email = "nogrades@example.com",
         };
         _context.Students.Add(student);
         await _context.SaveChangesAsync();
@@ -123,14 +123,14 @@ public sealed class GradesControllerTests : IDisposable
         // Assert
         var actionResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var response = actionResult.Value.Should().BeAssignableTo<object>().Subject;
-        
+
         var expectedResponse = new
         {
             StudentId = student.Id,
             StudentName = "No Grades Student",
             Grades = new List<object>(),
             AverageGrade = 0.0,
-            TotalGrades = 0
+            TotalGrades = 0,
         };
 
         response.Should().BeEquivalentTo(expectedResponse, options => options
@@ -145,7 +145,7 @@ public sealed class GradesControllerTests : IDisposable
         {
             Value = 9.5,
             Subject = "Biology",
-            StudentId = 1
+            StudentId = 1,
         };
 
         // Act
@@ -154,14 +154,14 @@ public sealed class GradesControllerTests : IDisposable
         // Assert
         var actionResult = result.Result.Should().BeOfType<CreatedAtActionResult>().Subject;
         actionResult.ActionName.Should().Be(nameof(GradesController.GetGrade));
-        
+
         var response = actionResult.Value.Should().BeAssignableTo<object>().Subject;
-        
+
         // Verify the response structure
         var responseType = response.GetType();
         var gradeProperty = responseType.GetProperty("Grade");
         var grade = gradeProperty!.GetValue(response) as GradeResponseDto;
-        
+
         grade.Should().NotBeNull();
         grade!.Value.Should().Be(9.5);
         grade.Subject.Should().Be("Biology");
@@ -176,7 +176,7 @@ public sealed class GradesControllerTests : IDisposable
         {
             Value = 8.0,
             Subject = "History",
-            StudentId = 999 // Non-existent student
+            StudentId = 999, // Non-existent student
         };
 
         // Act
@@ -195,7 +195,7 @@ public sealed class GradesControllerTests : IDisposable
         var updateDto = new UpdateGradeDto
         {
             Value = 9.5,
-            Subject = "Advanced Mathematics"
+            Subject = "Advanced Mathematics",
         };
 
         // Act
@@ -204,12 +204,12 @@ public sealed class GradesControllerTests : IDisposable
         // Assert
         var actionResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var response = actionResult.Value.Should().BeAssignableTo<object>().Subject;
-        
+
         // Verify the response structure
         var responseType = response.GetType();
         var gradeProperty = responseType.GetProperty("Grade");
         var grade = gradeProperty!.GetValue(response) as GradeResponseDto;
-        
+
         grade.Should().NotBeNull();
         grade!.Id.Should().Be(1);
         grade.Value.Should().Be(9.5);
@@ -222,7 +222,7 @@ public sealed class GradesControllerTests : IDisposable
         // Arrange
         var updateDto = new UpdateGradeDto
         {
-            Value = 7.0
+            Value = 7.0,
             // Subject is null, should not be updated
         };
 
@@ -232,11 +232,11 @@ public sealed class GradesControllerTests : IDisposable
         // Assert
         var actionResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var response = actionResult.Value.Should().BeAssignableTo<object>().Subject;
-        
+
         var responseType = response.GetType();
         var gradeProperty = responseType.GetProperty("Grade");
         var grade = gradeProperty!.GetValue(response) as GradeResponseDto;
-        
+
         grade.Should().NotBeNull();
         grade!.Value.Should().Be(7.0);
         grade.Subject.Should().Be("Mathematics"); // Should remain unchanged
@@ -248,7 +248,7 @@ public sealed class GradesControllerTests : IDisposable
         // Arrange
         var updateDto = new UpdateGradeDto
         {
-            Value = 8.0
+            Value = 8.0,
         };
 
         // Act
@@ -269,7 +269,7 @@ public sealed class GradesControllerTests : IDisposable
         // Assert
         var actionResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var response = actionResult.Value.Should().BeAssignableTo<object>().Subject;
-        
+
         // Verify the response contains the expected message
         var responseType = response.GetType();
         var messageProperty = responseType.GetProperty("Message");
@@ -301,7 +301,7 @@ public sealed class GradesControllerTests : IDisposable
         {
             Value = 6.0, // This should lower the average
             Subject = "Art",
-            StudentId = 1
+            StudentId = 1,
         };
 
         // Act
@@ -310,15 +310,15 @@ public sealed class GradesControllerTests : IDisposable
         // Assert
         var actionResult = result.Result.Should().BeOfType<CreatedAtActionResult>().Subject;
         var response = actionResult.Value.Should().BeAssignableTo<object>().Subject;
-        
+
         var responseType = response.GetType();
         var studentInfoProperty = responseType.GetProperty("StudentInfo");
         var studentInfo = studentInfoProperty!.GetValue(response);
-        
+
         var studentInfoType = studentInfo!.GetType();
         var newAverageProperty = studentInfoType.GetProperty("NewAverageGrade");
         var newAverage = (double)newAverageProperty!.GetValue(studentInfo)!;
-        
+
         // New average should be (8.5 + 9.0 + 6.0) / 3 = 7.83 (rounded to 2 decimal places)
         newAverage.Should().Be(7.83);
     }

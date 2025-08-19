@@ -28,7 +28,7 @@ public sealed class StudentsControllerTests : IDisposable
         var actionResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var students = actionResult.Value.Should().BeAssignableTo<IEnumerable<StudentResponseDto>>().Subject;
         students.Should().HaveCount(2);
-        
+
         var studentsList = students.ToList();
         studentsList[0].Name.Should().Be("John Doe");
         studentsList[0].Email.Should().Be("john.doe@example.com");
@@ -50,7 +50,7 @@ public sealed class StudentsControllerTests : IDisposable
         // Assert
         var actionResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var student = actionResult.Value.Should().BeOfType<StudentResponseDto>().Subject;
-        
+
         student.Id.Should().Be(1);
         student.Name.Should().Be("John Doe");
         student.Email.Should().Be("john.doe@example.com");
@@ -77,7 +77,7 @@ public sealed class StudentsControllerTests : IDisposable
         var createDto = new CreateStudentDto
         {
             Name = "New Student",
-            Email = "new.student@example.com"
+            Email = "new.student@example.com",
         };
 
         // Act
@@ -86,7 +86,7 @@ public sealed class StudentsControllerTests : IDisposable
         // Assert
         var actionResult = result.Result.Should().BeOfType<CreatedAtActionResult>().Subject;
         var student = actionResult.Value.Should().BeOfType<StudentResponseDto>().Subject;
-        
+
         student.Name.Should().Be("New Student");
         student.Email.Should().Be("new.student@example.com");
         student.AverageGrade.Should().Be(0.0);
@@ -103,7 +103,7 @@ public sealed class StudentsControllerTests : IDisposable
         var createDto = new CreateStudentDto
         {
             Name = "Duplicate Email",
-            Email = "john.doe@example.com" // This email already exists
+            Email = "john.doe@example.com", // This email already exists
         };
 
         // Act
@@ -122,7 +122,7 @@ public sealed class StudentsControllerTests : IDisposable
         var updateDto = new UpdateStudentDto
         {
             Name = "Updated Name",
-            Email = "updated.email@example.com"
+            Email = "updated.email@example.com",
         };
 
         // Act
@@ -131,7 +131,7 @@ public sealed class StudentsControllerTests : IDisposable
         // Assert
         var actionResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var student = actionResult.Value.Should().BeOfType<StudentResponseDto>().Subject;
-        
+
         student.Id.Should().Be(1);
         student.Name.Should().Be("Updated Name");
         student.Email.Should().Be("updated.email@example.com");
@@ -143,7 +143,7 @@ public sealed class StudentsControllerTests : IDisposable
         // Arrange
         var updateDto = new UpdateStudentDto
         {
-            Name = "Only Name Updated"
+            Name = "Only Name Updated",
             // Email is null, should not be updated
         };
 
@@ -153,7 +153,7 @@ public sealed class StudentsControllerTests : IDisposable
         // Assert
         var actionResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var student = actionResult.Value.Should().BeOfType<StudentResponseDto>().Subject;
-        
+
         student.Id.Should().Be(1);
         student.Name.Should().Be("Only Name Updated");
         student.Email.Should().Be("john.doe@example.com"); // Should remain unchanged
@@ -165,7 +165,7 @@ public sealed class StudentsControllerTests : IDisposable
         // Arrange
         var updateDto = new UpdateStudentDto
         {
-            Name = "Updated Name"
+            Name = "Updated Name",
         };
 
         // Act
@@ -183,7 +183,7 @@ public sealed class StudentsControllerTests : IDisposable
         // Arrange
         var updateDto = new UpdateStudentDto
         {
-            Email = "jane.smith@example.com" // This email belongs to student ID 2
+            Email = "jane.smith@example.com", // This email belongs to student ID 2
         };
 
         // Act
@@ -230,7 +230,7 @@ public sealed class StudentsControllerTests : IDisposable
         var updateDto = new UpdateStudentDto
         {
             Name = "Updated Name",
-            Email = "john.doe@example.com" // Same email as student ID 1
+            Email = "john.doe@example.com", // Same email as student ID 1
         };
 
         // Act
@@ -239,7 +239,7 @@ public sealed class StudentsControllerTests : IDisposable
         // Assert
         var actionResult = result.Result.Should().BeOfType<OkObjectResult>().Subject;
         var student = actionResult.Value.Should().BeOfType<StudentResponseDto>().Subject;
-        
+
         student.Id.Should().Be(1);
         student.Name.Should().Be("Updated Name");
         student.Email.Should().Be("john.doe@example.com");

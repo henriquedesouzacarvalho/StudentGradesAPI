@@ -28,7 +28,7 @@ public class DTOTests
         var dto = new CreateStudentDto
         {
             Name = expectedName,
-            Email = expectedEmail
+            Email = expectedEmail,
         };
 
         // Assert
@@ -58,7 +58,7 @@ public class DTOTests
         var dto = new UpdateStudentDto
         {
             Name = expectedName,
-            Email = expectedEmail
+            Email = expectedEmail,
         };
 
         // Assert
@@ -91,7 +91,7 @@ public class DTOTests
         {
             Value = expectedValue,
             Subject = expectedSubject,
-            StudentId = expectedStudentId
+            StudentId = expectedStudentId,
         };
 
         // Assert
@@ -122,7 +122,7 @@ public class DTOTests
         var dto = new UpdateGradeDto
         {
             Value = expectedValue,
-            Subject = expectedSubject
+            Subject = expectedSubject,
         };
 
         // Assert
@@ -156,7 +156,7 @@ public class DTOTests
         var expectedAverageGrade = 8.5;
         var expectedGrades = new List<GradeResponseDto>
         {
-            new GradeResponseDto { Id = 1, Value = 8.5, Subject = "Math", StudentId = 1 }
+            new GradeResponseDto { Id = 1, Value = 8.5, Subject = "Math", StudentId = 1 },
         };
 
         // Act
@@ -167,7 +167,7 @@ public class DTOTests
             Email = expectedEmail,
             CreatedAt = expectedCreatedAt,
             AverageGrade = expectedAverageGrade,
-            Grades = expectedGrades
+            Grades = expectedGrades,
         };
 
         // Assert
@@ -210,7 +210,7 @@ public class DTOTests
             Value = expectedValue,
             Subject = expectedSubject,
             CreatedAt = expectedCreatedAt,
-            StudentId = expectedStudentId
+            StudentId = expectedStudentId,
         };
 
         // Assert

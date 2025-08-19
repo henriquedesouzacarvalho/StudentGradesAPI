@@ -6,7 +6,7 @@ namespace StudentGradesAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class StudentsController : ControllerBase
+public sealed class StudentsController : ControllerBase
 {
     private readonly StudentGradesContext _context;
 
@@ -34,7 +34,7 @@ public class StudentsController : ControllerBase
                     Value = g.Value,
                     Subject = g.Subject,
                     CreatedAt = g.CreatedAt,
-                    StudentId = g.StudentId
+                    StudentId = g.StudentId,
                 }).ToList(),
             })
             .ToListAsync();
@@ -61,14 +61,14 @@ public class StudentsController : ControllerBase
             Name = student.Name,
             Email = student.Email,
             CreatedAt = student.CreatedAt,
-            AverageGrade = student.Grades.Any() ? student.Grades.Average(g => g.Value) : 0.0,
+            AverageGrade = student.Grades.Count != 0 ? student.Grades.Average(g => g.Value) : 0.0,
             Grades = student.Grades.Select(g => new GradeResponseDto
             {
                 Id = g.Id,
                 Value = g.Value,
                 Subject = g.Subject,
                 CreatedAt = g.CreatedAt,
-                StudentId = g.StudentId
+                StudentId = g.StudentId,
             }).ToList(),
         };
 
@@ -147,14 +147,14 @@ public class StudentsController : ControllerBase
             Name = student.Name,
             Email = student.Email,
             CreatedAt = student.CreatedAt,
-            AverageGrade = student.Grades.Any() ? student.Grades.Average(g => g.Value) : 0.0,
+            AverageGrade = student.Grades.Count != 0 ? student.Grades.Average(g => g.Value) : 0.0,
             Grades = student.Grades.Select(g => new GradeResponseDto
             {
                 Id = g.Id,
                 Value = g.Value,
                 Subject = g.Subject,
                 CreatedAt = g.CreatedAt,
-                StudentId = g.StudentId
+                StudentId = g.StudentId,
             }).ToList(),
         };
 

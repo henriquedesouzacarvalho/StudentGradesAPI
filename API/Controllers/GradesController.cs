@@ -6,7 +6,7 @@ namespace StudentGradesAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class GradesController : ControllerBase
+public sealed class GradesController : ControllerBase
 {
     private readonly StudentGradesContext _context;
 
@@ -81,7 +81,7 @@ public class GradesController : ControllerBase
             StudentId = g.StudentId,
         }).ToList();
 
-        var averageGrade = grades.Any() ? grades.Average(g => g.Value) : 0.0;
+        var averageGrade = grades.Count != 0 ? grades.Average(g => g.Value) : 0.0;
 
         return Ok(new
         {
@@ -122,7 +122,7 @@ public class GradesController : ControllerBase
         await _context.Entry(student).ReloadAsync();
         await _context.Entry(student).Collection(s => s.Grades).LoadAsync();
 
-        var newAverageGrade = student.Grades.Any() ? student.Grades.Average(g => g.Value) : 0.0;
+        var newAverageGrade = student.Grades.Count != 0 ? student.Grades.Average(g => g.Value) : 0.0;
 
         var gradeDto = new GradeResponseDto
         {
@@ -179,7 +179,7 @@ public class GradesController : ControllerBase
         _ = await _context.SaveChangesAsync();
 
         // Calculate new average
-        var newAverageGrade = grade.Student.Grades.Any() ? grade.Student.Grades.Average(g => g.Value) : 0.0;
+        var newAverageGrade = grade.Student.Grades.Count != 0 ? grade.Student.Grades.Average(g => g.Value) : 0.0;
 
         var gradeDto = new GradeResponseDto
         {
@@ -227,7 +227,7 @@ public class GradesController : ControllerBase
 
         // Reload student grades and calculate new average
         await _context.Entry(student).Collection(s => s.Grades).LoadAsync();
-        var newAverageGrade = student.Grades.Any() ? student.Grades.Average(g => g.Value) : 0.0;
+        var newAverageGrade = student.Grades.Count != 0 ? student.Grades.Average(g => g.Value) : 0.0;
 
         var response = new
         {

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace StudentGradesAPI.Models;
 
 // DTO for creating a new student
-public class CreateStudentDto
+public sealed class CreateStudentDto
 {
     [Required]
     [StringLength(100)]
@@ -15,7 +15,7 @@ public class CreateStudentDto
 }
 
 // DTO for updating a student
-public class UpdateStudentDto
+public sealed class UpdateStudentDto
 {
     [StringLength(100)]
     public string? Name { get; set; }
@@ -25,7 +25,7 @@ public class UpdateStudentDto
 }
 
 // DTO for creating a new grade
-public class CreateGradeDto
+public sealed class CreateGradeDto
 {
     [Required]
     [Range(0, 10, ErrorMessage = "Grade must be between 0 and 10")]
@@ -41,7 +41,7 @@ public class CreateGradeDto
 }
 
 // DTO for updating a grade
-public class UpdateGradeDto
+public sealed class UpdateGradeDto
 {
     [Range(0, 10, ErrorMessage = "Grade must be between 0 and 10")]
     public double? Value { get; set; }
@@ -51,7 +51,7 @@ public class UpdateGradeDto
 }
 
 // DTO for student response with average
-public class StudentResponseDto
+public sealed class StudentResponseDto
 {
     public int Id { get; set; }
 
@@ -63,11 +63,11 @@ public class StudentResponseDto
 
     public double AverageGrade { get; set; }
 
-    public List<GradeResponseDto> Grades { get; set; } = new List<GradeResponseDto>();
+    public IList<GradeResponseDto> Grades { get; set; } = new List<GradeResponseDto>();
 }
 
 // DTO for grade response
-public class GradeResponseDto
+public sealed class GradeResponseDto
 {
     public int Id { get; set; }
 

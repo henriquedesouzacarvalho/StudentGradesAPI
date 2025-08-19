@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StudentGradesAPI.Models;
 
-public class Grade
+public sealed class Grade
 {
     public int Id { get; set; }
 
@@ -20,5 +20,5 @@ public class Grade
     public int StudentId { get; set; }
 
     // Navigation property
-    public virtual Student Student { get; set; } = null!;
+    public Student Student { get; set; } = null!;
 }

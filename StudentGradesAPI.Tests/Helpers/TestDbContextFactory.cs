@@ -31,7 +31,7 @@ public static class TestDbContextFactory
                 Id = 1,
                 Name = "John Doe",
                 Email = "john.doe@example.com",
-                CreatedAt = DateTime.UtcNow.AddDays(-10)
+                CreatedAt = DateTime.UtcNow.AddDays(-10),
             },
             new Student
             {
@@ -39,7 +39,7 @@ public static class TestDbContextFactory
                 Name = "Jane Smith",
                 Email = "jane.smith@example.com",
                 CreatedAt = DateTime.UtcNow.AddDays(-5)
-            }
+            },
         };
 
         var grades = new List<Grade>
@@ -50,7 +50,7 @@ public static class TestDbContextFactory
                 Value = 8.5,
                 Subject = "Mathematics",
                 StudentId = 1,
-                CreatedAt = DateTime.UtcNow.AddDays(-3)
+                CreatedAt = DateTime.UtcNow.AddDays(-3),
             },
             new Grade
             {
@@ -58,7 +58,7 @@ public static class TestDbContextFactory
                 Value = 9.0,
                 Subject = "Physics",
                 StudentId = 1,
-                CreatedAt = DateTime.UtcNow.AddDays(-2)
+                CreatedAt = DateTime.UtcNow.AddDays(-2),
             },
             new Grade
             {
@@ -67,7 +67,7 @@ public static class TestDbContextFactory
                 Subject = "Chemistry",
                 StudentId = 2,
                 CreatedAt = DateTime.UtcNow.AddDays(-1)
-            }
+            },
         };
 
         context.Students.AddRange(students);

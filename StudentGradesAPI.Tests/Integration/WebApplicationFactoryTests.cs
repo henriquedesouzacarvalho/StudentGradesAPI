@@ -1,10 +1,10 @@
+using System.Net;
+using System.Net.Http.Json;
+using System.Text.Json;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using StudentGradesAPI.Models;
-using System.Net;
-using System.Net.Http.Json;
-using System.Text.Json;
 using Xunit;
 
 namespace StudentGradesAPI.Tests.Integration;
@@ -24,7 +24,7 @@ public class WebApplicationFactoryTests : IClassFixture<WebApplicationFactory<Pr
     public async Task GetStudents_ShouldReturnSuccessStatusCode()
     {
         // Act
-        var response = await _client.GetAsync("/api/students");
+        var response = await _client.GetAsync(new Uri("/api/students", UriKind.Relative));
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -34,7 +34,7 @@ public class WebApplicationFactoryTests : IClassFixture<WebApplicationFactory<Pr
     public async Task GetGrades_ShouldReturnSuccessStatusCode()
     {
         // Act
-        var response = await _client.GetAsync("/api/grades");
+        var response = await _client.GetAsync(new Uri("/api/grades", UriKind.Relative));
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -47,7 +47,7 @@ public class WebApplicationFactoryTests : IClassFixture<WebApplicationFactory<Pr
         var createDto = new CreateStudentDto
         {
             Name = "Integration Test Student",
-            Email = "integration@test.com"
+            Email = "integration@test.com",
         };
 
         // Act
@@ -55,13 +55,13 @@ public class WebApplicationFactoryTests : IClassFixture<WebApplicationFactory<Pr
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Created);
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var student = JsonSerializer.Deserialize<StudentResponseDto>(content, new JsonSerializerOptions
         {
-            PropertyNameCaseInsensitive = true
+            PropertyNameCaseInsensitive = true,
         });
-        
+
         student.Should().NotBeNull();
         student!.Name.Should().Be("Integration Test Student");
         student.Email.Should().Be("integration@test.com");
@@ -71,7 +71,7 @@ public class WebApplicationFactoryTests : IClassFixture<WebApplicationFactory<Pr
     public async Task GetStudent_WithInvalidId_ShouldReturnNotFound()
     {
         // Act
-        var response = await _client.GetAsync("/api/students/999");
+        var response = await _client.GetAsync(new Uri("/api/students/999", UriKind.Relative));
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -81,7 +81,7 @@ public class WebApplicationFactoryTests : IClassFixture<WebApplicationFactory<Pr
     public async Task GetGrade_WithInvalidId_ShouldReturnNotFound()
     {
         // Act
-        var response = await _client.GetAsync("/api/grades/999");
+        var response = await _client.GetAsync(new Uri("/api/grades/999", UriKind.Relative));
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
@@ -103,7 +103,7 @@ public class WebApplicationFactoryTests : IClassFixture<WebApplicationFactory<Pr
     public async Task SwaggerEndpoint_ShouldBeAccessible()
     {
         // Act
-        var response = await _client.GetAsync("/swagger/index.html");
+        var response = await _client.GetAsync(new Uri("/swagger/index.html", UriKind.Relative));
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -113,7 +113,7 @@ public class WebApplicationFactoryTests : IClassFixture<WebApplicationFactory<Pr
     public async Task HealthCheck_RootEndpoint_ShouldReturnNotFound()
     {
         // Act
-        var response = await _client.GetAsync("/");
+        var response = await _client.GetAsync(new Uri("/", UriKind.Relative));
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);

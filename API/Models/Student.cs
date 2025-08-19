@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StudentGradesAPI.Models;
 
-public class Student
+public sealed class Student
 {
     public int Id { get; set; }
 
@@ -17,8 +17,8 @@ public class Student
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     // Navigation property for grades
-    public virtual ICollection<Grade> Grades { get; set; } = new List<Grade>();
+    public ICollection<Grade> Grades { get; } = new List<Grade>();
 
     // Calculated property for average grade
-    public double AverageGrade => Grades.Any() ? Grades.Average(g => g.Value) : 0.0;
+    public double AverageGrade => Grades.Count != 0 ? Grades.Average(g => g.Value) : 0.0;
 }

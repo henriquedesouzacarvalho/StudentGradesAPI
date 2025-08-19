@@ -39,7 +39,7 @@ public class GradeTests
             Subject = expectedSubject,
             StudentId = expectedStudentId,
             CreatedAt = expectedCreatedAt,
-            Student = expectedStudent
+            Student = expectedStudent,
         };
 
         // Assert
@@ -111,7 +111,7 @@ public class GradeTests
         {
             Id = 1,
             Name = "Jane Doe",
-            Email = "jane@example.com"
+            Email = "jane@example.com",
         };
 
         // Act
@@ -120,7 +120,7 @@ public class GradeTests
             Value = 9.0,
             Subject = "Physics",
             StudentId = student.Id,
-            Student = student
+            Student = student,
         };
 
         // Assert
