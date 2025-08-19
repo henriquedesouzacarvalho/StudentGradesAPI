@@ -1,0 +1,22 @@
+feat: 
+
+# Conventional Commit Format:
+# <type>(<scope>): <description>
+#
+# Types:
+# feat: nova funcionalidade
+# fix: correção de bug
+# docs: alterações na documentação
+# style: formatação, ponto e vírgula, etc
+# refactor: refatoração de código
+# perf: melhoria de performance
+# test: adição ou correção de testes
+# build: mudanças no build ou dependências
+# ci: mudanças na configuração de CI
+# chore: outras mudanças que não modificam src ou test
+#
+# Exemplos:
+# feat(auth): adicionar autenticação JWT
+# fix(api): corrigir erro de null reference
+# docs: atualizar README com instruções
+# test(controllers): adicionar testes unitários
