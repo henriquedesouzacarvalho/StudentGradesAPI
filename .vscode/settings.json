@@ -19,9 +19,11 @@
   "dotnet.codeLens.enableTestsCodeLens": true,
   "dotnet.navigation.navigateToDecompiledSources": true,
   "dotnet.quickInfo.showRemarksInQuickInfo": true,
-  "dotnet.unitTests.enableAutoDiscovery": true,
   "dotnet.unitTests.runSettingsPath": "",
-  "dotnet.unitTests.testProjectPath": "**/*Tests.csproj",
+  "dotnet.unitTests.testProjectPath": "**/StudentGradesAPI.Tests.csproj",
+  "dotnet.test.autoDetectEnvironmentVariables": true,
+  "dotnet.test.testWindow.showPassingTests": true,
+  "dotnet.test.enableTesting": true,
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "editor.formatOnType": true,
@@ -134,13 +136,7 @@
     }
   },
   "sonarlint.pathToCompileCommands": "${workspaceFolder}/compile_commands.json",
-  "sonarlint.output.showAnalyzerLogs": false,
   "sonarlint.output.showVerboseLogs": false,
-  "sonarlint.rules": {
-    "typescript:S1186": "off",
-    "typescript:S3776": "off",
-    "csharp:S1186": "off"
-  },
   "cSpell.language": "en,pt-BR",
   "cSpell.words": [
     "appsettings",
@@ -203,8 +199,6 @@
   "testing.defaultGutterClickAction": "run",
   "testing.followRunningTest": true,
   "testing.gutterEnabled": true,
-  "nxConsole.enableTelemetry": false,
-  "nxConsole.showNodeVersionOnStartup": false,
   "errorLens.enabledDiagnosticLevels": ["error", "warning", "info"],
   "errorLens.excludeBySource": ["csharp", "eslint"],
   "better-comments.tags": [

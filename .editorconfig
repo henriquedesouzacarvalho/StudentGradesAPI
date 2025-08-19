@@ -269,6 +269,16 @@ dotnet_diagnostic.CA1031.severity = suggestion
 dotnet_diagnostic.CA1062.severity = suggestion
 dotnet_diagnostic.CA1822.severity = suggestion
 
+# CA1515: Mark types as internal when they're not referenced from outside the assembly
+# This is not a critical SonarCloud issue for API projects
+dotnet_diagnostic.CA1515.severity = none
+
+# CA2227: Collection properties should be read-only
+dotnet_diagnostic.CA2227.severity = suggestion
+
+# CA1861: Avoid constant arrays as arguments
+dotnet_diagnostic.CA1861.severity = suggestion
+
 # Nullable reference types
 dotnet_diagnostic.CS8600.severity = warning
 dotnet_diagnostic.CS8601.severity = warning
@@ -277,3 +287,11 @@ dotnet_diagnostic.CS8603.severity = warning
 dotnet_diagnostic.CS8604.severity = warning
 dotnet_diagnostic.CS8618.severity = warning
 dotnet_diagnostic.CS8625.severity = warning
+
+# Test-specific suppressions
+[*Tests/**/*.cs]
+dotnet_diagnostic.CA2234.severity = none
+dotnet_diagnostic.SA1413.severity = none
+dotnet_diagnostic.SA1515.severity = none
+dotnet_diagnostic.SA1009.severity = none
+dotnet_diagnostic.SA0001.severity = none

@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StudentGradesAPI.Extensions;
 using StudentGradesAPI.Models;
 
 namespace StudentGradesAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class GradesController : ControllerBase
+public sealed class GradesController : ControllerBase
 {
     private readonly StudentGradesContext _context;
 
@@ -21,17 +22,9 @@ public class GradesController : ControllerBase
     {
         var grades = await _context.Grades
             .Include(g => g.Student)
-            .Select(g => new GradeResponseDto
-            {
-                Id = g.Id,
-                Value = g.Value,
-                Subject = g.Subject,
-                CreatedAt = g.CreatedAt,
-                StudentId = g.StudentId,
-            })
             .ToListAsync();
 
-        return Ok(grades);
+        return Ok(grades.ToResponseDto());
     }
 
     // GET: api/Grades/5
@@ -44,19 +37,10 @@ public class GradesController : ControllerBase
 
         if (grade == null)
         {
-            return NotFound(new { message = $"Grade with ID {id} not found." });
+            return this.EntityNotFound("Grade", id);
         }
 
-        var gradeDto = new GradeResponseDto
-        {
-            Id = grade.Id,
-            Value = grade.Value,
-            Subject = grade.Subject,
-            CreatedAt = grade.CreatedAt,
-            StudentId = grade.StudentId,
-        };
-
-        return Ok(gradeDto);
+        return Ok(grade.ToResponseDto());
     }
 
     // GET: api/Grades/student/5
@@ -69,7 +53,7 @@ public class GradesController : ControllerBase
 
         if (student == null)
         {
-            return NotFound(new { message = $"Student with ID {studentId} not found." });
+            return this.EntityNotFound("Student", studentId);
         }
 
         var grades = student.Grades.Select(g => new GradeResponseDto
@@ -81,7 +65,7 @@ public class GradesController : ControllerBase
             StudentId = g.StudentId,
         }).ToList();
 
-        var averageGrade = grades.Any() ? grades.Average(g => g.Value) : 0.0;
+        var averageGrade = grades.Count != 0 ? grades.Average(g => g.Value) : 0.0;
 
         return Ok(new
         {
@@ -122,7 +106,7 @@ public class GradesController : ControllerBase
         await _context.Entry(student).ReloadAsync();
         await _context.Entry(student).Collection(s => s.Grades).LoadAsync();
 
-        var newAverageGrade = student.Grades.Any() ? student.Grades.Average(g => g.Value) : 0.0;
+        var newAverageGrade = student.Grades.Count != 0 ? student.Grades.Average(g => g.Value) : 0.0;
 
         var gradeDto = new GradeResponseDto
         {
@@ -162,7 +146,7 @@ public class GradesController : ControllerBase
 
         if (grade == null)
         {
-            return NotFound(new { message = $"Grade with ID {id} not found." });
+            return this.EntityNotFound("Grade", id);
         }
 
         // Update only provided fields
@@ -179,7 +163,7 @@ public class GradesController : ControllerBase
         _ = await _context.SaveChangesAsync();
 
         // Calculate new average
-        var newAverageGrade = grade.Student.Grades.Any() ? grade.Student.Grades.Average(g => g.Value) : 0.0;
+        var newAverageGrade = grade.Student.Grades.Count != 0 ? grade.Student.Grades.Average(g => g.Value) : 0.0;
 
         var gradeDto = new GradeResponseDto
         {
@@ -218,7 +202,7 @@ public class GradesController : ControllerBase
 
         if (grade == null)
         {
-            return NotFound(new { message = $"Grade with ID {id} not found." });
+            return this.EntityNotFound("Grade", id);
         }
 
         var student = grade.Student;
@@ -227,7 +211,7 @@ public class GradesController : ControllerBase
 
         // Reload student grades and calculate new average
         await _context.Entry(student).Collection(s => s.Grades).LoadAsync();
-        var newAverageGrade = student.Grades.Any() ? student.Grades.Average(g => g.Value) : 0.0;
+        var newAverageGrade = student.Grades.Count != 0 ? student.Grades.Average(g => g.Value) : 0.0;
 
         var response = new
         {

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentGradesAPI", "API\StudentGradesAPI.csproj", "{B8339241-0B69-5F93-79B7-D03175CC40C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentGradesAPI.Tests", "StudentGradesAPI.Tests\StudentGradesAPI.Tests.csproj", "{86B668E5-6D84-4D03-87C8-CE41EF294B85}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
