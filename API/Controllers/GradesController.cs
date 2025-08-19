@@ -81,6 +81,8 @@ public sealed class GradesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<object>> PostGrade(CreateGradeDto createGradeDto)
     {
+        ArgumentNullException.ThrowIfNull(createGradeDto);
+
         // Check if student exists
         var student = await _context.Students
             .Include(s => s.Grades)
@@ -139,6 +141,7 @@ public sealed class GradesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<object>> PutGrade(int id, UpdateGradeDto updateGradeDto)
     {
+        ArgumentNullException.ThrowIfNull(updateGradeDto);
         var grade = await _context.Grades
             .Include(g => g.Student)
             .ThenInclude(s => s.Grades)
