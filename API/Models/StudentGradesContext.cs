@@ -15,6 +15,7 @@ public sealed class StudentGradesContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        ArgumentNullException.ThrowIfNull(modelBuilder);
         base.OnModelCreating(modelBuilder);
 
         // Configure Student entity

@@ -47,6 +47,8 @@ public sealed class StudentsController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<StudentResponseDto>> PostStudent(CreateStudentDto createStudentDto)
     {
+        ArgumentNullException.ThrowIfNull(createStudentDto);
+
         // Check if email already exists
         if (await _context.Students.AnyAsync(s => s.Email == createStudentDto.Email))
         {
@@ -70,6 +72,7 @@ public sealed class StudentsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<StudentResponseDto>> PutStudent(int id, UpdateStudentDto updateStudentDto)
     {
+        ArgumentNullException.ThrowIfNull(updateStudentDto);
         var student = await _context.Students
             .Include(s => s.Grades)
             .FirstOrDefaultAsync(s => s.Id == id);
