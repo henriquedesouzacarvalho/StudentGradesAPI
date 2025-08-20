@@ -40,6 +40,7 @@ stages:
         steps:
           - checkout: self
             fetchDepth: "0"
+            persistCredentials: "true"
 
           - task: PowerShell@2
             displayName: "Debug GitVersion"
