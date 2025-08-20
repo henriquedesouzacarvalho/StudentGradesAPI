@@ -2,23 +2,18 @@ mode: ContinuousDeployment
 branches:
   main:
     tag: ""
-    increment: Patch
   develop:
     tag: "beta"
-    increment: Minor
   feature:
     tag: "alpha"
+    regex: "^features?[/-]"
     increment: Patch
   release:
     tag: "rc"
-    increment: None
+    regex: "^releases?[/-]"
   hotfix:
     tag: "hotfix"
-    increment: Patch
-major-version-bump-message: "BREAKING CHANGE|breaking change"
+    regex: "^hotfix(es)?[/-]"
+major-version-bump-message: "BREAKING CHANGE"
 minor-version-bump-message: "^(feat)"
 patch-version-bump-message: "^(fix|docs|style|refactor|perf|test|chore)"
-tag-prefix: "v"
-legacy-semver-padding: 4
-build-metadata-padding: 4
-commits-since-version-source-padding: 4

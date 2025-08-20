@@ -42,6 +42,16 @@ stages:
             fetchDepth: "0"
 
           - task: PowerShell@2
+            displayName: "Debug GitVersion"
+            inputs:
+              targetType: "inline"
+              script: |
+                dotnet tool install --global GitVersion.Tool --version 5.12.0
+                dotnet-gitversion /showconfig
+                dotnet-gitversion /showvariable SemVer
+                git branch -a
+
+          - task: PowerShell@2
             displayName: "GitVersion"
             inputs:
               targetType: "inline"
