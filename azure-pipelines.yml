@@ -52,6 +52,17 @@ stages:
                 Write-Host "##vso[task.setvariable variable=GitVersion.AssemblySemVer]$($version.AssemblySemVer)"
                 Write-Host "Version: $($version.SemVer)"
 
+          - task: PowerShell@2
+            displayName: "Create Git Tag"
+            condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+            inputs:
+              targetType: "inline"
+              script: |
+                git config user.email "pipeline@company.com"
+                git config user.name "Azure Pipeline"
+                git tag "v$(GitVersion.SemVer)"
+                git push origin "v$(GitVersion.SemVer)"
+
           - task: UseDotNet@2
             displayName: "Install .NET 9 SDK"
             inputs:
