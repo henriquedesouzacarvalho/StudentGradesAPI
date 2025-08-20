@@ -56,7 +56,8 @@ stages:
               targetType: "inline"
               script: |
                 dotnet tool install --global GitVersion.Tool --version 5.12.0
-                $version = dotnet-gitversion | ConvertFrom-Json
+                $branchName = "$(Build.SourceBranchName)"
+                $version = dotnet-gitversion /overrideconfig mode=ContinuousDeployment /b $branchName | ConvertFrom-Json
                 Write-Host "##vso[task.setvariable variable=GitVersion.SemVer]$($version.SemVer)"
                 Write-Host "Version: $($version.SemVer)"
 
