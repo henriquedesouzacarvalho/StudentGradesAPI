@@ -46,10 +46,9 @@ stages:
             inputs:
               targetType: "inline"
               script: |
-                dotnet tool install --global GitVersion.Tool --version 5.12.0
-                dotnet-gitversion /showconfig
-                dotnet-gitversion /showvariable SemVer
+                Write-Host "Branch: $(Build.SourceBranch)"
                 git branch -a
+                cat gitversion.yml
 
           - task: PowerShell@2
             displayName: "GitVersion"
@@ -59,7 +58,6 @@ stages:
                 dotnet tool install --global GitVersion.Tool --version 5.12.0
                 $version = dotnet-gitversion | ConvertFrom-Json
                 Write-Host "##vso[task.setvariable variable=GitVersion.SemVer]$($version.SemVer)"
-                Write-Host "##vso[task.setvariable variable=GitVersion.AssemblySemVer]$($version.AssemblySemVer)"
                 Write-Host "Version: $($version.SemVer)"
 
           - task: PowerShell@2
