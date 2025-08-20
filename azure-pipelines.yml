@@ -109,9 +109,9 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Deploy to Azure App Service'
             inputs:
-              azureSubscription: '$(azureServiceConnection)'
+              azureSubscription: 'Azure-StudentGrades-Connection'
               appType: 'webApp'
-              appName: '$(devAppServiceName)'
+              appName: 'studentgrades-dev'
               package: '$(Pipeline.Workspace)/drop/*.zip'
 
 - stage: DeployProd
@@ -134,7 +134,7 @@ stages:
           - task: AzureWebApp@1
             displayName: 'Deploy to Azure App Service'
             inputs:
-              azureSubscription: '$(azureServiceConnection)'
+              azureSubscription: 'Azure-StudentGrades-Connection'
               appType: 'webApp'
-              appName: '$(prodAppServiceName)'
+              appName: 'studentgrades-prod'
               package: '$(Pipeline.Workspace)/drop/*.zip'
