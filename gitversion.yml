@@ -14,6 +14,8 @@ branches:
   hotfix:
     tag: "hotfix"
     regex: "^hotfix[/-]"
-major-version-bump-message: "BREAKING CHANGE"
-minor-version-bump-message: "^(feat)"
-patch-version-bump-message: "^(fix|docs|style|refactor|perf|test|chore)"
+commit-message-incrementing:
+  major-version-bump-message: "BREAKING CHANGE"
+  minor-version-bump-message: "^feat"
+  patch-version-bump-message: "^(fix|docs|style|refactor|perf|test|chore)"
+  no-bump-message: "^(ci|build)"
