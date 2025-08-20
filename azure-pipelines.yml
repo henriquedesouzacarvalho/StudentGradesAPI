@@ -43,6 +43,14 @@ stages:
             persistCredentials: "true"
 
           - task: PowerShell@2
+            displayName: "Fix detached HEAD"
+            inputs:
+              targetType: "inline"
+              script: |
+                git checkout $(Build.SourceBranchName)
+                git branch -a
+
+          - task: PowerShell@2
             displayName: "Debug GitVersion"
             inputs:
               targetType: "inline"
