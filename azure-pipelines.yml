@@ -57,6 +57,13 @@ stages:
                 Write-Host "Next Version: $version"
 
           - task: PowerShell@2
+            displayName: "Set Build Number"
+            inputs:
+              targetType: "inline"
+              script: |
+                Write-Host "##vso[build.updatebuildnumber]$(NextVersion)"
+
+          - task: PowerShell@2
             displayName: "Create Git Tag"
             condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
             inputs:
