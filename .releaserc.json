@@ -1,0 +1,11 @@
+{
+  "branches": [
+    "main",
+    "develop",
+    { "name": "feature/*", "prerelease": "alpha" }
+  ],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator"
+  ]
+}

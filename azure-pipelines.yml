@@ -42,28 +42,19 @@ stages:
             fetchDepth: "0"
             persistCredentials: "true"
 
+          - task: NodeTool@0
+            inputs:
+              versionSpec: "18.x"
+
           - task: PowerShell@2
-            displayName: "Fix detached HEAD"
+            displayName: "Semantic Release"
             inputs:
               targetType: "inline"
               script: |
-                git checkout $(Build.SourceBranchName)
-                git branch -a
-
-          - task: PowerShell@2
-            displayName: "GitVersion"
-            inputs:
-              targetType: "inline"
-              script: |
-                # check if exists any tag
-                $tags = git tag
-                if (-not $tags) {
-                  Write-Host "create initial tag..."
-                  git tag "v0.1.0"
-                }
-
-                dotnet tool install --global GitVersion.Tool --version 5.12.0
-                dotnet-gitversion /output buildserver
+                npm install -g semantic-release @semantic-release/changelog @semantic-release/git
+                $version = semantic-release --dry-run --no-ci | Select-String "next release version is" | ForEach-Object {$_.ToString().Split(" ")[-1]}
+                Write-Host "##vso[task.setvariable variable=NextVersion]$version"
+                Write-Host "Next Version: $version"
 
           - task: PowerShell@2
             displayName: "Create Git Tag"
@@ -94,7 +85,7 @@ stages:
             inputs:
               command: "build"
               projects: "$(solutionPath)"
-              arguments: "--configuration $(buildConfiguration) --no-restore"
+              arguments: "--configuration $(buildConfiguration) --no-restore /p:Version=$(NextVersion)"
 
           - task: DotNetCoreCLI@2
             displayName: "Run tests"

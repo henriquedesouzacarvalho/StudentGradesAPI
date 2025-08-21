@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
   "settings": {
     "documentationRules": {
-      "companyName": "Sua Empresa",
+      "companyName": "My company",
       "copyrightText": "Copyright (c) {companyName}. All rights reserved.\nLicensed under the {licenseName} license. See {licenseFile} file in the project root for full license information.",
       "variables": {
         "licenseName": "MIT",
@@ -23,24 +23,12 @@
     "namingRules": {
       "allowCommonHungarianPrefixes": false,
       "allowedHungarianPrefixes": [],
-      "allowedNamespaceComponents": [
-        "DTO",
-        "API",
-        "UI",
-        "DB",
-        "IO"
-      ],
+      "allowedNamespaceComponents": ["DTO", "API", "UI", "DB", "IO"],
       "includeInferredTupleElementNames": true,
       "tupleElementNameCasing": "camelCase"
     },
     "maintainabilityRules": {
-      "topLevelTypes": [
-        "class",
-        "interface",
-        "struct",
-        "delegate",
-        "enum"
-      ]
+      "topLevelTypes": ["class", "interface", "struct", "delegate", "enum"]
     },
     "layoutRules": {
       "newlineAtEndOfFile": "allow",
@@ -54,4 +42,3 @@
     }
   }
 }
-

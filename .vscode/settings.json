@@ -289,9 +289,5 @@
       "name": "Vue Green",
       "value": "#42b883"
     }
-  ],
-  "sonarlint.connectedMode.project": {
-    "connectionId": "henriquedesouzacarvalho",
-    "projectKey": "henriquedesouzacarvalho_StudentGradesAPI"
-  }
+  ]
 }
