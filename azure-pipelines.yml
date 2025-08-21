@@ -51,23 +51,19 @@ stages:
                 git branch -a
 
           - task: PowerShell@2
-            displayName: "Debug GitVersion"
-            inputs:
-              targetType: "inline"
-              script: |
-                Write-Host "Branch: $(Build.SourceBranch)"
-                git branch -a
-                cat gitversion.yml
-
-          - task: PowerShell@2
             displayName: "GitVersion"
             inputs:
               targetType: "inline"
               script: |
+                # check if exists any tag
+                $tags = git tag
+                if (-not $tags) {
+                  Write-Host "create initial tag..."
+                  git tag "v0.1.0"
+                }
+
                 dotnet tool install --global GitVersion.Tool --version 5.12.0
-                $version = dotnet-gitversion /overrideconfig mode=ContinuousDeployment /overrideconfig branches.feature.tag=alpha /overrideconfig branches.feature.increment=Patch | ConvertFrom-Json
-                Write-Host "##vso[task.setvariable variable=GitVersion.SemVer]$($version.SemVer)"
-                Write-Host "Version: $($version.SemVer)"
+                dotnet-gitversion /output buildserver
 
           - task: PowerShell@2
             displayName: "Create Git Tag"
