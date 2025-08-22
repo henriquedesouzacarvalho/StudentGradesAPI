@@ -22,11 +22,17 @@ pr:
       - docs/*
 
 variables:
-  buildConfiguration: "Release"
-  dotNetVersion: "9.x"
-  projectPath: "API/StudentGradesAPI.csproj"
-  testProjectPath: "StudentGradesAPI.Tests/StudentGradesAPI.Tests.csproj"
-  solutionPath: "StudentGradesAPI.sln"
+  - group: semantic-release-secrets
+  - name: buildConfiguration
+    value: "Release"
+  - name: dotNetVersion
+    value: "9.x"
+  - name: projectPath
+    value: "API/StudentGradesAPI.csproj"
+  - name: testProjectPath
+    value: "StudentGradesAPI.Tests/StudentGradesAPI.Tests.csproj"
+  - name: solutionPath
+    value: "StudentGradesAPI.sln"
 
 stages:
   - stage: Build
@@ -48,69 +54,50 @@ stages:
 
           - task: PowerShell@2
             displayName: "Semantic Release"
+            condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
             inputs:
               targetType: "inline"
               script: |
                 npm ci
 
-                Write-Host "=== Executando semantic-release ==="
-                $env:GITHUB_TOKEN = "$(System.AccessToken)"
-
-                if ("$(Build.SourceBranch)" -eq "refs/heads/main") {
-                  # Produção: release real
-                  $output = npx semantic-release 2>&1 | Out-String
-                  Write-Host $output
-
-                  # Extrair versão do package.json após release
-                  $packageJson = Get-Content package.json | ConvertFrom-Json
-                  $version = $packageJson.version
-                } else {
-                  # Outras branches: dry-run para calcular versão
-                  $output = npx semantic-release --dry-run 2>&1 | Out-String
-                  Write-Host $output
-
-                  # Extrair versão do output
-                  if ($output -match "Published release (\S+) on") {
-                    $version = $matches[1]
-                  } elseif ($output -match "next release version is (\S+)") {
-                    $version = $matches[1]
-                  } else {
-                    # Fallback: usar versão do package.json + prerelease
-                    $packageJson = Get-Content package.json | ConvertFrom-Json
-                    $baseVersion = $packageJson.version
-                    $branchName = "$(Build.SourceBranchName)" -replace "[^a-zA-Z0-9]", ""
-                    $version = "$baseVersion-$branchName.$(Build.BuildNumber)"
-                  }
-                }
-
-                Write-Host "##vso[task.setvariable variable=NextVersion]$version"
-                Write-Host "Next Version: $version"
-
-          - task: PowerShell@2
-            displayName: "Set Build Number"
-            inputs:
-              targetType: "inline"
-              script: |
-                Write-Host "Setting build number to: $(NextVersion)"
-                Write-Host "##vso[build.updatebuildnumber]$(NextVersion)"
-
-          - task: PowerShell@2
-            displayName: "Create Git Tag"
-            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-            inputs:
-              targetType: "inline"
-              script: |
-                # Configurar Git
+                # Configurar git
                 git config user.email "pipeline@company.com"
                 git config user.name "Azure Pipeline"
 
-                # Só criar tag se semantic-release não criou (dry-run)
-                if ("$(Build.SourceBranch)" -ne "refs/heads/main") {
-                  Write-Host "Creating tag for non-main branch: v$(NextVersion)"
-                  git tag "v$(NextVersion)"
-                  git push origin "v$(NextVersion)"
+                # Executar semantic-release
+                $env:GITHUB_TOKEN = "$(GITHUB_TOKEN)"
+                $output = npx semantic-release 2>&1 | Out-String
+                Write-Host $output
+
+                # Capturar versão
+                $packageJson = Get-Content package.json | ConvertFrom-Json
+                $version = $packageJson.version
+                Write-Host "##vso[task.setvariable variable=NextVersion]$version"
+                Write-Host "##vso[build.updatebuildnumber]$version"
+            env:
+              GITHUB_TOKEN: $(GITHUB_TOKEN)
+
+          - task: PowerShell@2
+            displayName: "Set Build Number with Branch"
+            inputs:
+              targetType: "inline"
+              script: |
+                $packageJson = Get-Content package.json | ConvertFrom-Json
+                $currentVersion = $packageJson.version
+
+                $branchName = "$(Build.SourceBranchName)"
+                $sourceBranch = "$(Build.SourceBranch)"
+
+                if ($sourceBranch -like "*/feature/*" -or $sourceBranch -like "*/hotfix/*") {
+                  $version = "$currentVersion-$branchName.$(Build.BuildNumber)"
+                  Write-Host "##vso[task.setvariable variable=NextVersion]$version"
+                  Write-Host "##vso[build.updatebuildnumber]$version"
+                  Write-Host "Feature/Hotfix version set to: $version"
                 } else {
-                  Write-Host "Tag already created by semantic-release"
+                  $nextVersion = "$(NextVersion)"
+                  if ([string]::IsNullOrEmpty($nextVersion) -or $nextVersion -eq '$(NextVersion)') {
+                    Write-Host "##vso[task.setvariable variable=NextVersion]$currentVersion"
+                  }
                 }
 
           - task: UseDotNet@2
