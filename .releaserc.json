@@ -11,7 +11,7 @@
     {
       "name": "feature/**",
       "channel": "alpha",
-      "prerelease": "alpha"
+      "prerelease": true
     },
     {
       "name": "release/**",
@@ -21,7 +21,7 @@
     {
       "name": "hotfix/**",
       "channel": "hotfix",
-      "prerelease": "hotfix"
+      "prerelease": true
     }
   ],
   "plugins": [
