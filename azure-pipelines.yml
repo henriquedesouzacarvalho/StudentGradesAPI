@@ -82,15 +82,22 @@ stages:
             inputs:
               targetType: "inline"
               script: |
+                $packageJson = Get-Content package.json | ConvertFrom-Json
+                $currentVersion = $packageJson.version
+
                 $branchName = "$(Build.SourceBranchName)"
                 $sourceBranch = "$(Build.SourceBranch)"
 
                 if ($sourceBranch -like "*/feature/*" -or $sourceBranch -like "*/hotfix/*") {
-                  $version = "$(Build.BuildNumber)-$branchName"
+                  $version = "$currentVersion-$branchName.$(Build.BuildNumber)"
+                  Write-Host "##vso[task.setvariable variable=NextVersion]$version"
                   Write-Host "##vso[build.updatebuildnumber]$version"
-                  Write-Host "Build number set to: $version"
+                  Write-Host "Feature/Hotfix version set to: $version"
                 } else {
-                  Write-Host "Branch $branchName - keeping default build number"
+                  $nextVersion = "$(NextVersion)"
+                  if ([string]::IsNullOrEmpty($nextVersion) -or $nextVersion -eq '$(NextVersion)') {
+                    Write-Host "##vso[task.setvariable variable=NextVersion]$currentVersion"
+                  }
                 }
 
           - task: UseDotNet@2
