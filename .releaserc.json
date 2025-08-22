@@ -10,8 +10,8 @@
     },
     {
       "name": "feature/**",
-      "channel": "alpha",
-      "prerelease": true
+      "channel": "feature-${name.replace('feature/', '')}",
+      "prerelease": "alpha"
     },
     {
       "name": "release/**",
