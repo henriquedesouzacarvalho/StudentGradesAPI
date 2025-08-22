@@ -10,17 +10,17 @@
       "prerelease": "beta"
     },
     {
-      "name": "feature/*",
+      "name": "feature/**",
       "channel": "alpha",
       "prerelease": "alpha"
     },
     {
-      "name": "release/*",
+      "name": "release/**",
       "channel": "rc",
       "prerelease": "rc"
     },
     {
-      "name": "hotfix/*",
+      "name": "hotfix/**",
       "channel": "hotfix",
       "prerelease": "hotfix"
     }
