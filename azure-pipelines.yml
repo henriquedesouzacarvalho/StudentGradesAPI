@@ -54,25 +54,22 @@ stages:
                 # Instalar dependências
                 npm install
 
-                # Executar semantic-release
-                if ("$(Build.SourceBranch)" -eq "refs/heads/main") {
-                  # Produção: fazer release real
-                  npx semantic-release
-                  $version = (Get-Content package.json | ConvertFrom-Json).version
-                } else {
-                  # Outras branches: dry-run para pegar versão
-                  $output = npx semantic-release --dry-run 2>&1
-                  $versionLine = $output | Select-String "The next release version is"
-                  if ($versionLine) {
-                    $version = ($versionLine.ToString() -split " ")[-1]
-                  } else {
-                    # Fallback: usar versão atual + prerelease
-                    $currentVersion = (Get-Content package.json | ConvertFrom-Json).version
-                    $branchName = "$(Build.SourceBranchName)" -replace "[^a-zA-Z0-9]", ""
-                    $version = "$currentVersion-$branchName.$(Build.BuildNumber)"
-                  }
-                }
+                # Debug: verificar arquivos
+                Write-Host "=== Arquivos no diretório ==="
+                ls -la
 
+                Write-Host "=== Conteúdo package.json ==="
+                Get-Content package.json
+
+                Write-Host "=== Conteúdo .releaserc.json ==="
+                Get-Content .releaserc.json
+
+                Write-Host "=== Executando semantic-release dry-run ==="
+                $env:GITHUB_TOKEN = "$(System.AccessToken)"
+                npx semantic-release --dry-run --debug
+
+                # Por enquanto, usar versão fixa para testar
+                $version = "1.0.0"
                 Write-Host "##vso[task.setvariable variable=NextVersion]$version"
                 Write-Host "Next Version: $version"
 
