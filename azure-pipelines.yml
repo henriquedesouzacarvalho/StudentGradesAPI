@@ -85,7 +85,7 @@ stages:
                 $sourceBranch = "$(Build.SourceBranch)"
 
                 if ($sourceBranch -like "*/feature/*" -or $sourceBranch -like "*/hotfix/*") {
-                  $version = "1.0.0-$branchName.$(Build.BuildNumber)"
+                  $version = "$(Build.BuildNumber)-$branchName"
                   Write-Host "##vso[build.updatebuildnumber]$version"
                   Write-Host "Build number set to: $version"
                 } else {
