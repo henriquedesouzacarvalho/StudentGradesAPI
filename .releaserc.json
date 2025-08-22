@@ -1,8 +1,7 @@
 {
   "branches": [
     {
-      "name": "main",
-      "channel": false
+      "name": "main"
     },
     {
       "name": "develop",
