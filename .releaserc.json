@@ -53,7 +53,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "powershell -Command \"(Get-Content 'API/StudentGradesAPI.csproj') -replace '<Version>.*</Version>', '<Version>${nextRelease.version}</Version>' | Set-Content 'API/StudentGradesAPI.csproj'\""
+        "prepareCmd": "sed -i 's|<Version>.*</Version>|<Version>${nextRelease.version}</Version>|g' API/StudentGradesAPI.csproj"
       }
     ],
     [
