@@ -1,11 +1,72 @@
 {
   "branches": [
-    "main",
-    "develop",
-    { "name": "feature/*", "prerelease": "alpha" }
+    {
+      "name": "main",
+      "channel": false
+    },
+    {
+      "name": "develop",
+      "channel": "beta",
+      "prerelease": "beta"
+    },
+    {
+      "name": "feature/*",
+      "channel": "alpha",
+      "prerelease": "alpha"
+    },
+    {
+      "name": "release/*",
+      "channel": "rc",
+      "prerelease": "rc"
+    },
+    {
+      "name": "hotfix/*",
+      "channel": "hotfix",
+      "prerelease": "hotfix"
+    }
   ],
   "plugins": [
-    "@semantic-release/commit-analyzer",
-    "@semantic-release/release-notes-generator"
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "conventionalcommits",
+        "releaseRules": [
+          { "type": "feat", "release": "minor" },
+          { "type": "fix", "release": "patch" },
+          { "type": "docs", "release": "patch" },
+          { "type": "style", "release": "patch" },
+          { "type": "refactor", "release": "patch" },
+          { "type": "perf", "release": "patch" },
+          { "type": "test", "release": "patch" },
+          { "type": "chore", "release": "patch" },
+          { "type": "ci", "release": false },
+          { "type": "build", "release": false },
+          { "scope": "no-release", "release": false }
+        ],
+        "parserOpts": {
+          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"]
+        }
+      }
+    ],
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md"
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "powershell -Command \"(Get-Content 'API/StudentGradesAPI.csproj') -replace '<Version>.*</Version>', '<Version>${nextRelease.version}</Version>' | Set-Content 'API/StudentGradesAPI.csproj'\""
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md", "API/StudentGradesAPI.csproj"],
+        "message": "chore(release): ${nextRelease.version} [skip ci]"
+      }
+    ]
   ]
 }

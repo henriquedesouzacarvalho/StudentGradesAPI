@@ -51,8 +51,23 @@ stages:
             inputs:
               targetType: "inline"
               script: |
-                npm install -g semantic-release @semantic-release/changelog @semantic-release/git
-                $version = semantic-release --dry-run --no-ci | Select-String "next release version is" | ForEach-Object {$_.ToString().Split(" ")[-1]}
+                npm ci
+
+                if ("$(Build.SourceBranch)" -eq "refs/heads/main") {
+                  npx semantic-release
+                  $version = (Get-Content package.json | ConvertFrom-Json).version
+                } else {
+                  $output = npx semantic-release --dry-run 2>&1
+                  $versionLine = $output | Select-String "The next release version is"
+                  if ($versionLine) {
+                    $version = ($versionLine.ToString() -split " ")[-1]
+                  } else {
+                    $currentVersion = (Get-Content package.json | ConvertFrom-Json).version
+                    $branchName = "$(Build.SourceBranchName)" -replace "[^a-zA-Z0-9]", ""
+                    $version = "$currentVersion-$branchName.$(Build.BuildNumber)"
+                  }
+                }
+
                 Write-Host "##vso[task.setvariable variable=NextVersion]$version"
                 Write-Host "Next Version: $version"
 
@@ -71,8 +86,8 @@ stages:
               script: |
                 git config user.email "pipeline@company.com"
                 git config user.name "Azure Pipeline"
-                git tag "v$(GitVersion.SemVer)"
-                git push origin "v$(GitVersion.SemVer)"
+                git tag "v$(NextVersion)"
+                git push origin "v$(NextVersion)"
 
           - task: UseDotNet@2
             displayName: "Install .NET 9 SDK"
