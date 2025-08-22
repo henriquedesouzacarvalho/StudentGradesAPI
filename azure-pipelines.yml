@@ -51,17 +51,22 @@ stages:
             inputs:
               targetType: "inline"
               script: |
-                npm ci
+                # Instalar dependências
+                npm install
 
+                # Executar semantic-release
                 if ("$(Build.SourceBranch)" -eq "refs/heads/main") {
+                  # Produção: fazer release real
                   npx semantic-release
                   $version = (Get-Content package.json | ConvertFrom-Json).version
                 } else {
+                  # Outras branches: dry-run para pegar versão
                   $output = npx semantic-release --dry-run 2>&1
                   $versionLine = $output | Select-String "The next release version is"
                   if ($versionLine) {
                     $version = ($versionLine.ToString() -split " ")[-1]
                   } else {
+                    # Fallback: usar versão atual + prerelease
                     $currentVersion = (Get-Content package.json | ConvertFrom-Json).version
                     $branchName = "$(Build.SourceBranchName)" -replace "[^a-zA-Z0-9]", ""
                     $version = "$currentVersion-$branchName.$(Build.BuildNumber)"
