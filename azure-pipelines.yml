@@ -54,6 +54,7 @@ stages:
 
           - task: PowerShell@2
             displayName: "Semantic Release"
+            condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
             inputs:
               targetType: "inline"
               script: |
@@ -91,60 +92,6 @@ stages:
                 } else {
                   Write-Host "Branch $branchName - keeping default build number"
                 }
-
-          # - task: PowerShell@2
-          #   displayName: "Semantic Release"
-          #   inputs:
-          #     targetType: "inline"
-          #     script: |
-          #       npm ci
-
-          #       Write-Host "=== Executando semantic-release ==="
-          #       $env:GITHUB_TOKEN = "$(System.AccessToken)"
-
-          #       $output = npx semantic-release 2>&1 | Out-String
-          #       Write-Host $output
-
-          #       # Captura versão de qualquer tipo de release
-          #       if ($output -match "Published release ([0-9]+\.[0-9]+\.[0-9]+(?:-[a-zA-Z0-9\.\-]+)?)") {
-          #         $version = $matches[1]
-          #         Write-Host "Version created: $version"
-          #       } else {
-          #         # Fallback para package.json
-          #         $packageJson = Get-Content package.json | ConvertFrom-Json
-          #         $version = $packageJson.version
-          #         Write-Host "Version fallback: $version"
-          #       }
-
-          #       Write-Host "##vso[task.setvariable variable=NextVersion]$version"
-          #       Write-Host "##vso[build.updatebuildnumber]$version"
-
-          # - task: PowerShell@2
-          #   displayName: "Set Build Number"
-          #   inputs:
-          #     targetType: "inline"
-          #     script: |
-          #       Write-Host "Setting build number to: $(NextVersion)"
-          #       Write-Host "##vso[build.updatebuildnumber]$(NextVersion)"
-
-          # - task: PowerShell@2
-          #   displayName: "Create Git Tag"
-          #   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-          #   inputs:
-          #     targetType: "inline"
-          #     script: |
-          #       # Configurar Git
-          #       git config user.email "pipeline@company.com"
-          #       git config user.name "Azure Pipeline"
-
-          #       # Só criar tag se semantic-release não criou (dry-run)
-          #       if ("$(Build.SourceBranch)" -ne "refs/heads/main") {
-          #         Write-Host "Creating tag for non-main branch: v$(NextVersion)"
-          #         git tag "v$(NextVersion)"
-          #         git push origin "v$(NextVersion)"
-          #       } else {
-          #         Write-Host "Tag already created by semantic-release"
-          #       }
 
           - task: UseDotNet@2
             displayName: "Install .NET 9 SDK"
