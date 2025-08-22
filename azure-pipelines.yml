@@ -40,16 +40,78 @@ stages:
         steps:
           - checkout: self
             fetchDepth: "0"
+            persistCredentials: "true"
 
-          - task: gitversion/setup@0
-            displayName: "Install GitVersion"
+          - task: NodeTool@0
             inputs:
-              versionSpec: "5.x"
+              versionSpec: "18.x"
 
-          - task: gitversion/execute@0
-            displayName: "Execute GitVersion"
+          - task: PowerShell@2
+            displayName: "Semantic Release"
             inputs:
-              useConfigFile: true
+              targetType: "inline"
+              script: |
+                npm ci
+
+                Write-Host "=== Executando semantic-release ==="
+                $env:GITHUB_TOKEN = "$(System.AccessToken)"
+
+                if ("$(Build.SourceBranch)" -eq "refs/heads/main") {
+                  # Produção: release real
+                  $output = npx semantic-release 2>&1 | Out-String
+                  Write-Host $output
+
+                  # Extrair versão do package.json após release
+                  $packageJson = Get-Content package.json | ConvertFrom-Json
+                  $version = $packageJson.version
+                } else {
+                  # Outras branches: dry-run para calcular versão
+                  $output = npx semantic-release --dry-run 2>&1 | Out-String
+                  Write-Host $output
+
+                  # Extrair versão do output
+                  if ($output -match "Published release (\S+) on") {
+                    $version = $matches[1]
+                  } elseif ($output -match "next release version is (\S+)") {
+                    $version = $matches[1]
+                  } else {
+                    # Fallback: usar versão do package.json + prerelease
+                    $packageJson = Get-Content package.json | ConvertFrom-Json
+                    $baseVersion = $packageJson.version
+                    $branchName = "$(Build.SourceBranchName)" -replace "[^a-zA-Z0-9]", ""
+                    $version = "$baseVersion-$branchName.$(Build.BuildNumber)"
+                  }
+                }
+
+                Write-Host "##vso[task.setvariable variable=NextVersion]$version"
+                Write-Host "Next Version: $version"
+
+          - task: PowerShell@2
+            displayName: "Set Build Number"
+            inputs:
+              targetType: "inline"
+              script: |
+                Write-Host "Setting build number to: $(NextVersion)"
+                Write-Host "##vso[build.updatebuildnumber]$(NextVersion)"
+
+          - task: PowerShell@2
+            displayName: "Create Git Tag"
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+            inputs:
+              targetType: "inline"
+              script: |
+                # Configurar Git
+                git config user.email "pipeline@company.com"
+                git config user.name "Azure Pipeline"
+
+                # Só criar tag se semantic-release não criou (dry-run)
+                if ("$(Build.SourceBranch)" -ne "refs/heads/main") {
+                  Write-Host "Creating tag for non-main branch: v$(NextVersion)"
+                  git tag "v$(NextVersion)"
+                  git push origin "v$(NextVersion)"
+                } else {
+                  Write-Host "Tag already created by semantic-release"
+                }
 
           - task: UseDotNet@2
             displayName: "Install .NET 9 SDK"
@@ -69,7 +131,7 @@ stages:
             inputs:
               command: "build"
               projects: "$(solutionPath)"
-              arguments: "--configuration $(buildConfiguration) --no-restore"
+              arguments: "--configuration $(buildConfiguration) --no-restore /p:Version=$(NextVersion)"
 
           - task: DotNetCoreCLI@2
             displayName: "Run tests"
