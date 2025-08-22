@@ -76,6 +76,22 @@ stages:
             env:
               GITHUB_TOKEN: $(GITHUB_TOKEN)
 
+          - task: PowerShell@2
+            displayName: "Set Build Number with Branch"
+            inputs:
+              targetType: "inline"
+              script: |
+                $branchName = "$(Build.SourceBranchName)"
+                $sourceBranch = "$(Build.SourceBranch)"
+
+                if ($sourceBranch -like "*/feature/*" -or $sourceBranch -like "*/hotfix/*") {
+                  $version = "1.0.0-$branchName.$(Build.BuildNumber)"
+                  Write-Host "##vso[build.updatebuildnumber]$version"
+                  Write-Host "Build number set to: $version"
+                } else {
+                  Write-Host "Branch $branchName - keeping default build number"
+                }
+
           # - task: PowerShell@2
           #   displayName: "Semantic Release"
           #   inputs:
