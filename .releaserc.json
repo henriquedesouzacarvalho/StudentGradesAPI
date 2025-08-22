@@ -4,24 +4,14 @@
       "name": "main"
     },
     {
-      "name": "develop",
-      "channel": "beta",
-      "prerelease": "beta"
-    },
-    {
-      "name": "feature/**",
-      "channel": "feature-${name.replace('feature/', '')}",
-      "prerelease": "alpha"
-    },
-    {
       "name": "release/**",
       "channel": "rc",
       "prerelease": "rc"
     },
     {
-      "name": "hotfix/**",
-      "channel": "hotfix",
-      "prerelease": true
+      "name": "develop",
+      "channel": "beta",
+      "prerelease": "beta"
     }
   ],
   "plugins": [
