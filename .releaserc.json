@@ -1,18 +1,7 @@
 {
   "branches": [
     {
-      "name": "main",
-      "channel": false
-    },
-    {
-      "name": "develop",
-      "channel": "beta",
-      "prerelease": "beta"
-    },
-    {
-      "name": "feature/**",
-      "channel": "alpha",
-      "prerelease": "alpha"
+      "name": "main"
     },
     {
       "name": "release/**",
@@ -20,9 +9,9 @@
       "prerelease": "rc"
     },
     {
-      "name": "hotfix/**",
-      "channel": "hotfix",
-      "prerelease": "hotfix"
+      "name": "develop",
+      "channel": "beta",
+      "prerelease": "beta"
     }
   ],
   "plugins": [
@@ -53,7 +42,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "powershell -Command \"(Get-Content 'API/StudentGradesAPI.csproj') -replace '<Version>.*</Version>', '<Version>${nextRelease.version}</Version>' | Set-Content 'API/StudentGradesAPI.csproj'\""
+        "prepareCmd": "sed -i 's|<Version>.*</Version>|<Version>${nextRelease.version}</Version>|g' API/StudentGradesAPI.csproj"
       }
     ],
     [
