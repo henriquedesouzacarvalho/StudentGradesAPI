@@ -51,18 +51,7 @@ stages:
             inputs:
               targetType: "inline"
               script: |
-                # Instalar dependências
                 npm install
-
-                # Debug: verificar arquivos
-                Write-Host "=== Arquivos no diretório ==="
-                ls -la
-
-                Write-Host "=== Conteúdo package.json ==="
-                Get-Content package.json
-
-                Write-Host "=== Conteúdo .releaserc.json ==="
-                Get-Content .releaserc.json
 
                 Write-Host "=== Executando semantic-release dry-run ==="
                 $env:GITHUB_TOKEN = "$(System.AccessToken)"
