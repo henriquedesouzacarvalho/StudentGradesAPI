@@ -12,6 +12,23 @@
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
 
+  <Target Name="SetVersionFromPackageJson" BeforeTargets="GetAssemblyVersion;GenerateAssemblyInfo"
+    Condition="'$(Version)' == ''">
+    <ReadLinesFromFile File="../package.json">
+      <Output TaskParameter="Lines" ItemName="PackageJsonLines" />
+    </ReadLinesFromFile>
+
+    <PropertyGroup>
+      <PackageJsonContent>@(PackageJsonLines, '%0A')</PackageJsonContent>
+      <VersionLine>$([System.Text.RegularExpressions.Regex]::Match($(PackageJsonContent),
+        '"version":\s*"([^"]+)"').Groups[1].Value)</VersionLine>
+      <Version Condition="'$(VersionLine)' != ''">$(VersionLine)</Version>
+      <Version Condition="'$(Version)' == ''">1.0.0-local</Version>
+    </PropertyGroup>
+
+    <Message Text="Using version from package.json: $(Version)" Importance="high" />
+  </Target>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.8" />
