@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/henriquedesouzacarvalho/StudentGradesAPI/compare/v1.0.1...v1.0.2) (2025-08-25)
+
+
+### Bug Fixes
+
+* fix version update after build ([5bcbc62](https://github.com/henriquedesouzacarvalho/StudentGradesAPI/commit/5bcbc62e32475f3b52719700ede467862c5ab269))
+
 ## [1.0.1](https://github.com/henriquedesouzacarvalho/StudentGradesAPI/compare/v1.0.0...v1.0.1) (2025-08-25)
 
 
