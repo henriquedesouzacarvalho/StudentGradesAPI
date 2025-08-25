@@ -11,7 +11,10 @@ public sealed class VersionController : ControllerBase
     [ProducesResponseType<int>(StatusCodes.Status200OK)]
     public IActionResult GetVersion()
     {
-        var version = Assembly.GetExecutingAssembly().GetName().Version;
+        var assembly = Assembly.GetExecutingAssembly();
+        var version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion
+                     ?? assembly.GetName().Version?.ToString();
+
         return Ok(new { Version = version?.ToString() });
     }
 }
