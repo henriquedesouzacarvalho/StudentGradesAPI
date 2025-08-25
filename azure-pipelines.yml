@@ -4,8 +4,6 @@ trigger:
     include:
       - main
       - develop
-      - feature/*
-      - fix/*
   paths:
     exclude:
       - README.md
@@ -60,16 +58,13 @@ stages:
               script: |
                 npm ci
 
-                # Configurar git
                 git config user.email "pipeline@company.com"
                 git config user.name "Azure Pipeline"
 
-                # Executar semantic-release
                 $env:GITHUB_TOKEN = "$(GITHUB_TOKEN)"
                 $output = npx semantic-release 2>&1 | Out-String
                 Write-Host $output
 
-                # Capturar versão
                 $packageJson = Get-Content package.json | ConvertFrom-Json
                 $version = $packageJson.version
                 Write-Host "##vso[task.setvariable variable=NextVersion]$version"
@@ -94,10 +89,8 @@ stages:
                   Write-Host "##vso[build.updatebuildnumber]$version"
                   Write-Host "Feature/Hotfix version set to: $version"
                 } else {
-                  $nextVersion = "$(NextVersion)"
-                  if ([string]::IsNullOrEmpty($nextVersion) -or $nextVersion -eq '$(NextVersion)') {
-                    Write-Host "##vso[task.setvariable variable=NextVersion]$currentVersion"
-                  }
+                  Write-Host "Main/Develop branch - using semantic-release version or fallback"
+                  Write-Host "##vso[task.setvariable variable=NextVersion]$currentVersion"
                 }
 
           - task: UseDotNet@2
