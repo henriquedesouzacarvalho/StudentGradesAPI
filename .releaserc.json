@@ -43,7 +43,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "sed -i 's|<Version>.*</Version>|<Version>${nextRelease.version}</Version>|g' API/StudentGradesAPI.csproj"
+        "prepareCmd": "sed -i 's|<Version>.*</Version>|<Version>${nextRelease.version}</Version>|g' API/StudentGradesAPI.csproj && sed -i 's|<AssemblyVersion>.*</AssemblyVersion>|<AssemblyVersion>${nextRelease.version}</AssemblyVersion>|g' API/StudentGradesAPI.csproj && sed -i 's|<FileVersion>.*</FileVersion>|<FileVersion>${nextRelease.version}</FileVersion>|g' API/StudentGradesAPI.csproj && sed -i 's|<ProductVersion>.*</ProductVersion>|<ProductVersion>${nextRelease.version}</ProductVersion>|g' API/StudentGradesAPI.csproj"
       }
     ],
     [
